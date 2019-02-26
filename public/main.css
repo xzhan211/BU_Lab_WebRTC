@@ -42,3 +42,30 @@ form {
   margin-left: 20px;
   margin-bottom: 20px;
 }
+
+.title {
+  vertical-align: top;
+}
+
+
+.display {
+  width: 100%;
+  min-height: 400px;
+  padding-bottom: 20px;
+}
+
+.status {
+  height: 125px;
+  vertical-align: text-top;
+  font-weight: bold;
+  margin-bottom: 10px;
+  border-bottom: 2px solid black;
+}
+
+.message {
+  height: 125px;
+  max-height: 125px;
+  margin-bottom: 10px;
+  border-bottom: 2px solid black;
+  overflow: auto;
+}

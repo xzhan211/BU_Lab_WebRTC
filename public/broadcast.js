@@ -223,68 +223,13 @@ function getCamIDs(){
     }
     console.log(deviceInfos);
   });
-
-  /*
-  .then(function(devices) {
-    let index = 1;
-    devices.forEach(function(device) {
-      if(device.kind === "videoinput"){
-        allID.set(index, [device.label, device.deviceId]);
-        index += 1;
-      }
-    });
-
-    // display camera label on list
-    // each label relate to a cam id
-    if(allID.size === 2){
-      firstCamId = allID.get(1)[1];
-      firstCamLabel = allID.get(1)[0];
-      secondCamId = allID.get(2)[1];
-      secondCamLabel = allID.get(2)[0];
-    }else if(allID.size === 1){
-      firstCamId = allID.get(1)[1];
-      firstCamLabel = allID.get(1)[0];
-      secondCamLabel = "--";
-    }else if(allID.size === 0){
-      firstCamLabel = "--";
-      secondCamLabel = "--";
-      console.log("No any camera exist!!");
-    }
-    document.getElementById("firstCam").innerHTML = firstCamLabel;
-    document.getElementById("secondCam").innerHTML = secondCamLabel;
-
-    console.log("In");
-    console.log(allID);
-    console.log("first cam >> "+ firstCamLabel + " ::: Id >> "+ firstCamId);
-    console.log("second cam >> "+ secondCamLabel + " ::: Id >> "+ secondCamId);
-
-  });
-  */
 }
+
 
 /*
-const firstCam = document.querySelector('#firstCam');
-firstCam.onclick = () => {
-  getFirstCam();
-};
-
-function getFirstCam(){
-  videoSource = firstCamId;
-  console.log("call first camera >> " + firstCamLabel);
-  console.log(videoSource);
-};
-
-const secondCam = document.querySelector('#secondCam');
-secondCam.onclick = () => {
-  getSecondCam();
-};
-
-function getSecondCam(){
-  videoSource = secondCamId;
-  console.log("call second camera" + secondCamLabel);
-  console.log(videoSource);
-}
+Receive text
 */
+
 
 /*
 running every time

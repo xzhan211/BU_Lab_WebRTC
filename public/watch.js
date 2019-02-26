@@ -35,3 +35,12 @@ socket.on('broadcaster', function() {
 socket.on('bye', function() {
 	peerConnection.close();
 });
+
+
+
+
+
+
+/*
+  send message
+*/
