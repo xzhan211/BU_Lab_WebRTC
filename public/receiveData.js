@@ -30,6 +30,8 @@ function initialize() {
     console.log('ID: ' + peer.id);
     recvId.innerHTML = "ID: " + peer.id;
     status.innerHTML = "Awaiting connection...";
+    //test
+    socket.emit('peerId_test', peer.id);
   });
 
   peer.on('connection', function (c) {
@@ -43,7 +45,7 @@ function initialize() {
     }
     conn = c;
     console.log("Connected to: " + conn.peer);
-    status.innerHTML = "Connected"
+    status.innerHTML = "Connected";
     ready();
   });
 
@@ -68,6 +70,18 @@ function initialize() {
   });
 };
 
+function ready() {
+  conn.on('data', function (data) {
+    console.log("Data recieved");
+    var cueString = "<span class=\"cueMsg\">Cue: </span>";
+    addMessage("<span class=\"peerMsg\">Peer: </span>" + data);
+  });
+  conn.on('close', function () {
+    status.innerHTML = "Connection reset<br>Awaiting connection...";
+    conn = null;
+    start(true);
+  });
+}
 
 function addMessage(msg) {
   let now = new Date();

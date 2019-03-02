@@ -2,7 +2,7 @@
 let lastPeerId = null;
 let peer = null; // own peer object
 let conn = null;
-let recvIdInput = document.getElementById("receiver-id");
+//let recvIdInput = document.getElementById("receiver-id");
 let status = document.getElementById("status");
 let message = document.getElementById("message");
 let sendMessageBox = document.getElementById("sendMessageBox");
@@ -10,6 +10,11 @@ let sendButton = document.getElementById("sendButton");
 let clearMsgsButton = document.getElementById("clearMsgsButton");
 let connectButton = document.getElementById("connect-button");
 let cueString = "<span class=\"cueMsg\">Cue: </span>";
+
+
+let peerId_test = null;
+let receivedPeerId = null;
+
 /**
 * Create the Peer object for our end of the connection.
 *
@@ -66,7 +71,8 @@ function join() {
     conn.close();
   }
   // Create connection to destination peer specified in the input field
-  conn = peer.connect(recvIdInput.value, {
+  //conn = peer.connect(recvIdInput.value, {
+  conn = peer.connect(receivedPeerId, {
     reliable: true
   });
   conn.on('open', function () {
@@ -79,6 +85,7 @@ function join() {
   });
   // Handle incoming data (messages only since this is the signal sender)
   conn.on('data', function (data) {
+    console.log("receive data>> " + data);
     addMessage("<span class=\"peerMsg\">Peer:</span> " + data);
   });
 
@@ -164,3 +171,10 @@ clearMsgsButton.onclick = function () {
 connectButton.addEventListener('click', join);
 // Since all our callbacks are setup, start the process of obtaining an ID
 initialize();
+
+socket.on('peerId_test', function(data) {
+  receivedPeerId = data;
+  console.log("This peerId is from broadcast part >>  "+data);
+});
+
+//socket.emit('peerId_test', 'haha');

@@ -18,6 +18,7 @@ const io = require('socket.io')(server);
 app.use(express.static(__dirname + '/public'));
 io.sockets.on('error', e => console.log(e));
 io.sockets.on('connection', function (socket) {
+  console.log("test>> a user connected");
   socket.on('broadcaster', function () {
     broadcaster = socket.id;
     socket.broadcast.emit('broadcaster');
@@ -35,7 +36,15 @@ io.sockets.on('connection', function (socket) {
     socket.to(id).emit('candidate', socket.id, message);
   });
   socket.on('disconnect', function() {
+    console.log('test>> a user disconnected');
     broadcaster && socket.to(broadcaster).emit('bye', socket.id);
   });
+  //test zxy
+  socket.on('peerId_test', function(msg){
+    console.log('peerId_test >> I am in!');
+    console.log(msg);
+    socket.broadcast.emit('peerId_test', msg);
+  });
+
 });
 server.listen(port, () => console.log(`Server is running on port ${port}`));
