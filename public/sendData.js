@@ -109,17 +109,6 @@ function getUrlParam(name) {
   else
     return results[1];
 };
-/**
-* Send a signal via the peer connection and add it to the log.
-* This will only occur if the connection is still alive.
-*/
-function signal(sigName) {
-  if (conn.open) {
-    conn.send(sigName);
-    console.log(sigName + " signal sent");
-    addMessage(cueString + sigName);
-  }
-}
 
 function addMessage(msg) {
   let now = new Date();
