@@ -58,7 +58,8 @@ my example, how to use conn.send(msg)
 4. data can be dispalyed in console from broadcast side
 */
 function user(){
-  for(let i=0; i<10; i++)
+    console.log("test >>");
+    for(let i=0; i<20; i++)
     conn.send(i);
 }
 
