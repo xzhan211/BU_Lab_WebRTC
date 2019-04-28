@@ -59,8 +59,10 @@ my example, how to use conn.send(msg)
 */
 function user(){
     console.log("test >>");
-    for(let i=0; i<20; i++)
-    conn.send(i);
+    let dd = new Date();
+  let sentence ="time:" + dd.getTime() + "aaaa-aaaaa-aaaaaaaa-aaaaaaaaaaaaa-aaaaaaaaaaaaaaaaaaaa-aaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbb-cccccccccccccccccccccccccccccccccccccc-ccccccccccccccccccccccccccccccccccccccccccccccccccccccccc";
+    //for(let i=0; i<2000; i++)
+    conn.send(sentence);
 }
 
 let clearMsgsButton = document.getElementById("clearMsgsButton");

@@ -6,6 +6,9 @@ peer.on('open', function(id){
 });
 peer.on('connection', (conn) => {
   conn.on('data', (data) => {
+    let d = new Date();
     console.log(data);
+    console.log(d.getTime());
+    add();
   });
 });
