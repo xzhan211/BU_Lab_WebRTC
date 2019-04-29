@@ -2,24 +2,19 @@
 <html>
 
 <head>
-<meta name="viewport" content="width=device-width, user-scalable=no,minimum-scale=1.0, maximum-scale=1.0">
   <title>Viewer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta name="description" content="WebRTC Video Broadcast.">
   <link href="/main.css" rel="stylesheet">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
     integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-  <link href="/node_modules/video.js/dist/video-js.css" rel="stylesheet">
-  <link href="/node_modules/videojs-vr/dist/videojs-vr.css" rel="stylesheet">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style"
-  content="black-translucent">
 </head>
 
 <body>
   <div class="container">
     <div class="row">
       <div class="col">
-       <!--<form>
+        <form>
           <h4>Peer to Peer: Viewer </h4>
 
               <p>
@@ -49,16 +44,13 @@
               <p>
                 <label for="para7">para7</label>
                 <input type="TEXT" class="para7" id="para7" value="20">
-              </p>-
+              </p>
 
-           </form>-->
+        </form>
       </div>
       <div class="col-8">
         <div id="video_container">
-          <video id="live_video" class="video-js vjs-default-skin"
-            crossorigin="anonymous" preload="none" control
-            playsinline webkit-playsinline autoplay muted loop> </video>
-
+          <video id="live_video" style = "opacity:0;" width = "10" height = "10" playsinline autoplay muted> </video>
         </div>
       </div>
     </div>
@@ -90,22 +82,17 @@
     </table>
   </div>
 
-    <script src="/node_modules/video.js/dist/video.js"></script>
-    <script src="/node_modules/videojs-vr/dist/videojs-vr.js"></script>
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="/view.js"></script>
-    <script src="/watch.js"></script>
-    <script>
+  <!--script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/0.3.18/peer.min.js"></script>-->
+  <script src="https://unpkg.com/peerjs@1.0.0/dist/peerjs.min.js"></script>
+  <script src="/three.js"></script>
+  <script src="/DeviceOrientationControls.js"></script>
+  <script src="/CSS3DRenderer.js"></script>
 
-      var player = videojs('#live_video');
-      if (!player.mediainfo) {
-          player.mediainfo = {};
-      }
-      if (!player.mediainfo.projection) {
-        player.mediainfo.projection = 'AUTO';
-      }
-      player.vr({projection:'AUTO', debug: true, forceCardboard: false});
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/view.js"></script>
+  <script src="/watch.js"></script>
+  <!--<script src="/sendData.js"></script>-->
+  <!--<script src="/sendDemo.js"></script>-->
+</body>
 
-    </script>
-  </body>
 </html>
