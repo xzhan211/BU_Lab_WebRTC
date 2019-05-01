@@ -32,11 +32,12 @@
   </head>
   <body>
   <div id="container">
-    <video id="live_video1" width="640" height="360" class="videojs vjs-16-9 vjs-default-skin" crossorigin="anonymous" control playsinline>
+    <video id="live_video1" class="video-js vjs-default-skin" crossorigin="anonymous">
     </video>
     <!--<video id="live_video1" width="640" height="360" crossorigin="anonymous" control playsinline></video>-->
   </div>
 
+    <script src="/node_modules/videojs-vr/dist/videojs-vr.min.js"></script>
     <script src="https://unpkg.com/peerjs@1.0.0/dist/peerjs.min.js"></script>
     <script src="/three.js"></script>
     <script src="/DeviceOrientationControls.js"></script>
@@ -51,13 +52,13 @@
         var video1 = document.getElementById('live_video1');
         //var video1 = document.createElement('video');
         //video1.crossOrigin = 'anonymous';
-        //video1.width = 640;
-        //video1.height = 360;
+        video1.width = 640;
+        video1.height = 360;
         video1.loop = true;
         video1.muted = true;
         //video1.id = "live_video";
-        //video1.controls = true;
-        //video1.setAttribute('playsinline', '');
+        video1.controls = true;
+        video1.setAttribute('playsinline', '');
         //video1.play();
 
       let peerConnection;
@@ -114,6 +115,8 @@
 
 
       var camera, scene, renderer, controls, mobile;
+      var player = videojs('#live_video1',{techOrder: ['html5']}); // Adam added
+
 
 			var isUserInteracting = false,
 				lon = 0, lat = 0,
@@ -157,14 +160,14 @@
         //video1.play(); // Adam commented it out
 
 
-        var player = videojs('live_video1'); // Adam added
+        //var player = videojs('live_video1'); // Adam added
 
         //video1.player.play(); // Adam added
 
 
         //var texture = new THREE.VideoTexture(video1); // Adam commented out
         var texture = new THREE.VideoTexture(player.el().getElementsByTagName('video')[0]); // Adam added
-        console.log(player.el().getElementsByTagName('video')[0]);
+        // console.log(player.el().getElementsByTagName('video')[0]);
         var material = new THREE.MeshBasicMaterial( { map: texture } );
 
         mesh = new THREE.Mesh(geometry, material);
@@ -173,16 +176,21 @@
         renderer = new THREE.WebGLRenderer();
         renderer.setPixelRatio(window.devicePixelRatio);
         renderer.setSize(player.currentWidth(), player.currentHeight(), false);
-        //renderer.setSize(window.innerWidth, window.innerHeight);
+        //renderer.setSize(window.innerWidth, window.innerHeight); // used before videojs
         // Adam Adds
         var renderedCanvas = renderer.domElement;
-        //renderedCanvas.setAttribute('style', 'width: 100%; height: 100%; position: absolute; top:0;');
+
+        // The line below will make the canvas full screen
+        renderedCanvas.setAttribute('style', 'width: 100%; height: 100%; position: absolute; top:0;');
         player.el().insertBefore(renderedCanvas, player.el().firstChild);
-        player.el().getElementsByTagName('video')[0].style.display = '';
+        player.el().getElementsByTagName('video')[0].style.display = 'none';
         player.el().getElementsByTagName('video')[0].play();
+        //player.el().getElementsByTagName('video')[0].style.display = '';
+        player.controlBar.fullscreenToggle.show();
         // end Adam Adds
 
-        //container.appendChild(renderer.domElement);
+
+        //container.appendChild(renderer.domElement); // what was done before videojs
 
         document.addEventListener( 'mousedown', onDocumentMouseDown, false );
 				document.addEventListener( 'mousemove', onDocumentMouseMove, false );
