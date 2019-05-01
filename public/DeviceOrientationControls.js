@@ -100,6 +100,23 @@ THREE.DeviceOrientationControls = function ( object ) {
 
 	};
 
+  this.getX = function () {
+    return scope.object.quaternion.x;
+  };
+
+  this.getY = function () {
+    return scope.object.quaternion.y;
+  };
+
+  this.getZ = function () {
+    return scope.object.quaternion.z;
+  };
+
+  this.getW = function () {
+    return scope.object.quaternion.w;
+  };
+
+
 	this.dispose = function () {
 
 		scope.disconnect();

@@ -21,7 +21,7 @@
   <body>
   <div id="container"></div>
 
-    <!--<script src="https://unpkg.com/peerjs@1.0.0/dist/peerjs.min.js"></script>-->
+    <script src="https://unpkg.com/peerjs@1.0.0/dist/peerjs.min.js"></script>
     <script src="/three.js"></script>
     <script src="/DeviceOrientationControls.js"></script>
     <script src="/CSS3DRenderer.js"></script>
@@ -29,6 +29,8 @@
     <script src="/socket.io/socket.io.js"></script>
     <script src="/view.js"></script>
     <!--<script src="/watch.js"></script>-->
+    <!--<script src="/sendDemo.js"></script>-->
+
     <script>
       var video1 = document.createElement('video');
         video1.crossOrigin = 'anonymous';
@@ -78,6 +80,20 @@
       socket.on('bye', function() {
         peerConnection.close();
       });
+
+      let receivedPeerId = null;
+      let conn = null;
+      let peer = new Peer();
+
+      socket.on('peerId_test', function(data) {
+          receivedPeerId = data;
+          console.log("This peerId is from broadcast part >>  "+receivedPeerId);
+          conn = peer.connect(receivedPeerId);
+          conn.on('open', () => {
+            conn.send('Done');
+          });
+      });
+
 
       var camera, scene, renderer, controls, mobile;
 
@@ -201,6 +217,14 @@
 
         if(mobile){
           controls.update();
+          let dd = new Date();
+          let obj = {
+            'unix_time_with_ms': dd,
+            'quaternion': [controls.getX(), controls.getY(), controls.getZ(), controls.getW()]
+          }
+          if(conn != null){
+            conn.send(JSON.stringify(obj));
+          }
           renderer.render(scene, camera);
         }else{
           update();
@@ -212,8 +236,19 @@
 				lat = Math.max( - 85, Math.min( 85, lat ) );
 				phi = THREE.Math.degToRad( 90 - lat );
 				theta = THREE.Math.degToRad( lon );
-
-
+        let dd = new Date();
+        let obj = {
+          'unix_time_with_ms': dd,
+          'yaw': phi,
+          'pitch': theta
+        }
+        if(conn != null){
+          conn.send(JSON.stringify(obj));
+          /*conn.send('---- phi, theta ----');
+          conn.send(phi);
+          conn.send(theta);
+          conn.send('--------------------');*/
+        }
 
 				camera.position.x = distance * Math.sin( phi ) * Math.cos( theta );
 				camera.position.y = distance * Math.cos( phi );

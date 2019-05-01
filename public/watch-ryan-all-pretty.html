@@ -4,8 +4,20 @@
     <title>Viewer</title>
     <meta name ="description" content="WebRTC Video Broadcast.">
     <meta charset = 'utf-8'>
-    <link rel="shortcut icon" href="">
-    <style>
+    <link href="/main.css" rel="stylesheet">
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
+    <link href="//vjs.zencdn.net/7.3.0/video-js.min.css" rel="stylesheet">
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+    <script src="//vjs.zencdn.net/7.3.0/video.min.js"></script>
+
+    <!--<link rel="shortcut icon" href="">-->
+    <!--<style>
       html, body{
         width: 100%
         height: 100%
@@ -16,12 +28,16 @@
         background-color: #f0f0f0;
         overflow: hidden;
       }
-    </style>
+    </style>-->
   </head>
   <body>
-  <div id="container"></div>
+  <div id="container">
+    <video id="live_video1" width="640" height="360" class="videojs vjs-16-9 vjs-default-skin" crossorigin="anonymous" control playsinline>
+    </video>
+    <!--<video id="live_video1" width="640" height="360" crossorigin="anonymous" control playsinline></video>-->
+  </div>
 
-    <!--<script src="https://unpkg.com/peerjs@1.0.0/dist/peerjs.min.js"></script>-->
+    <script src="https://unpkg.com/peerjs@1.0.0/dist/peerjs.min.js"></script>
     <script src="/three.js"></script>
     <script src="/DeviceOrientationControls.js"></script>
     <script src="/CSS3DRenderer.js"></script>
@@ -29,15 +45,19 @@
     <script src="/socket.io/socket.io.js"></script>
     <script src="/view.js"></script>
     <!--<script src="/watch.js"></script>-->
+    <!--<script src="/sendDemo.js"></script>-->
+
     <script>
-      var video1 = document.createElement('video');
-        video1.crossOrigin = 'anonymous';
-        video1.width = 640;
-        video1.height = 360;
+        var video1 = document.getElementById('live_video1');
+        //var video1 = document.createElement('video');
+        //video1.crossOrigin = 'anonymous';
+        //video1.width = 640;
+        //video1.height = 360;
         video1.loop = true;
         video1.muted = true;
-        video1.controls = true;
-        video1.setAttribute('playsinline', '');
+        //video1.id = "live_video";
+        //video1.controls = true;
+        //video1.setAttribute('playsinline', '');
         //video1.play();
 
       let peerConnection;
@@ -79,6 +99,20 @@
         peerConnection.close();
       });
 
+      let receivedPeerId = null;
+      let conn = null;
+      let peer = new Peer();
+
+      socket.on('peerId_test', function(data) {
+          receivedPeerId = data;
+          console.log("This peerId is from broadcast part >>  "+receivedPeerId);
+          conn = peer.connect(receivedPeerId);
+          conn.on('open', () => {
+            conn.send('Done');
+          });
+      });
+
+
       var camera, scene, renderer, controls, mobile;
 
 			var isUserInteracting = false,
@@ -119,20 +153,36 @@
         video1.loop = true;
         video1.muted = true;
         video1.setAttribute('playsinline', '');*/
-        video1.play();
+
+        //video1.play(); // Adam commented it out
 
 
-        var texture = new THREE.VideoTexture(video1);
+        var player = videojs('live_video1'); // Adam added
+
+        //video1.player.play(); // Adam added
+
+
+        //var texture = new THREE.VideoTexture(video1); // Adam commented out
+        var texture = new THREE.VideoTexture(player.el().getElementsByTagName('video')[0]); // Adam added
+        console.log(player.el().getElementsByTagName('video')[0]);
         var material = new THREE.MeshBasicMaterial( { map: texture } );
 
         mesh = new THREE.Mesh(geometry, material);
 
         scene.add(mesh);
-
         renderer = new THREE.WebGLRenderer();
         renderer.setPixelRatio(window.devicePixelRatio);
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        container.appendChild(renderer.domElement);
+        renderer.setSize(player.currentWidth(), player.currentHeight(), false);
+        //renderer.setSize(window.innerWidth, window.innerHeight);
+        // Adam Adds
+        var renderedCanvas = renderer.domElement;
+        //renderedCanvas.setAttribute('style', 'width: 100%; height: 100%; position: absolute; top:0;');
+        player.el().insertBefore(renderedCanvas, player.el().firstChild);
+        player.el().getElementsByTagName('video')[0].style.display = '';
+        player.el().getElementsByTagName('video')[0].play();
+        // end Adam Adds
+
+        //container.appendChild(renderer.domElement);
 
         document.addEventListener( 'mousedown', onDocumentMouseDown, false );
 				document.addEventListener( 'mousemove', onDocumentMouseMove, false );
@@ -148,7 +198,7 @@
       }
 
 			function onWindowResize() {
-
+        alert("hi2");
 				camera.aspect = window.innerWidth / window.innerHeight;
 				camera.updateProjectionMatrix();
 
@@ -201,6 +251,14 @@
 
         if(mobile){
           controls.update();
+          let dd = new Date();
+          let obj = {
+            'unix_time_with_ms': dd,
+            'quaternion': [controls.getX(), controls.getY(), controls.getZ(), controls.getW()]
+          }
+          if(conn != null){
+            conn.send(JSON.stringify(obj));
+          }
           renderer.render(scene, camera);
         }else{
           update();
@@ -212,8 +270,19 @@
 				lat = Math.max( - 85, Math.min( 85, lat ) );
 				phi = THREE.Math.degToRad( 90 - lat );
 				theta = THREE.Math.degToRad( lon );
-
-
+        let dd = new Date();
+        let obj = {
+          'unix_time_with_ms': dd,
+          'yaw': phi,
+          'pitch': theta
+        }
+        if(conn != null){
+          conn.send(JSON.stringify(obj));
+          /*conn.send('---- phi, theta ----');
+          conn.send(phi);
+          conn.send(theta);
+          conn.send('--------------------');*/
+        }
 
 				camera.position.x = distance * Math.sin( phi ) * Math.cos( theta );
 				camera.position.y = distance * Math.cos( phi );
@@ -226,11 +295,13 @@
 			}
 
       function onWindowResize(){
+        alert("hi");
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth, window.innerHeight);
       }
 
     </script>
-  </body>
+
+    </body>
 </html>
