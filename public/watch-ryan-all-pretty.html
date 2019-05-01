@@ -27,11 +27,11 @@
         font-family: Monospace;
         background-color: #f0f0f0;
         overflow: hidden;
-      }
+
     </style>-->
   </head>
   <body>
-  <div id="container">
+  <div id="container" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 640px;">
     <video id="live_video1" class="video-js vjs-default-skin" crossorigin="anonymous">
     </video>
     <!--<video id="live_video1" width="640" height="360" crossorigin="anonymous" control playsinline></video>-->
@@ -116,6 +116,8 @@
 
       var camera, scene, renderer, controls, mobile;
       var player = videojs('#live_video1',{techOrder: ['html5']}); // Adam added
+      var original_player_width = player.currentWidth(); // Adam added
+      var original_player_height = player.currentHeight(); // Adam added
 
 
 			var isUserInteracting = false,
@@ -137,7 +139,8 @@
         mobile = isMobile();
 
         container = document.getElementById('container');
-        camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1100);
+        // camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1100);
+        camera = new THREE.PerspectiveCamera(75, player.currentWidth()/player.currentHeight(), 1, 1100); // Adam added
         if(mobile){
           controls = new THREE.DeviceOrientationControls( camera );
         }else{
@@ -173,7 +176,7 @@
         mesh = new THREE.Mesh(geometry, material);
 
         scene.add(mesh);
-        renderer = new THREE.WebGLRenderer();
+        renderer = new THREE.WebGLRenderer(); // not sure if we should add antialias to true saw online that it might be good for vr
         renderer.setPixelRatio(window.devicePixelRatio);
         renderer.setSize(player.currentWidth(), player.currentHeight(), false);
         //renderer.setSize(window.innerWidth, window.innerHeight); // used before videojs
@@ -186,7 +189,7 @@
         player.el().getElementsByTagName('video')[0].style.display = 'none';
         player.el().getElementsByTagName('video')[0].play();
         //player.el().getElementsByTagName('video')[0].style.display = '';
-        player.controlBar.fullscreenToggle.show();
+        //player.controlBar.fullscreenToggle.show();
         // end Adam Adds
 
 
@@ -201,18 +204,32 @@
         document.addEventListener( 'touchend', onDocumentMouseUp, false);*/
 
 
-        window.addEventListener('resize', onWindowResize, false);
+       // window.addEventListener('resize', onWindowResize, false); // Adam took away the event listener because the videjs canvas deals with this for us??
 
       }
 
-			function onWindowResize() {
-        alert("hi2");
-				camera.aspect = window.innerWidth / window.innerHeight;
-				camera.updateProjectionMatrix();
+			//function onWindowResize() {
+        //alert("hi2");
+				//camera.aspect = window.innerWidth / window.innerHeight;
+				//camera.updateProjectionMatrix();
 
-				renderer.setSize( window.innerWidth, window.innerHeight );
+				//renderer.setSize( window.innerWidth, window.innerHeight );
+        //console.log("hello");
+        // Adam added (start)
 
-			}
+        //camera.aspect = player.currentWidth()/player.currentHeight();
+        //camera.updateProjectionMatrix();
+        //renderer.setSize(player.currentWidth(),player.currentHeight());
+        //Adam add (end)
+
+
+		//	}
+
+      player.on('fullscreenchange', function(){
+        camera.aspect = this.currentWidth()/this.currentHeight();
+        camera.updateProjectionMatrix();
+        renderer.setSize(this.currentWidth(),this.currentHeight());
+      });
 
 			function onDocumentMouseDown( event ) {
 
@@ -302,12 +319,21 @@
 
 			}
 
-      function onWindowResize(){
-        alert("hi");
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-      }
+      //function onWindowResize(){
+        //console.log("hello1");
+        //camera.aspect = window.innerWidth / window.innerHeight;
+        //camera.updateProjectionMatrix();
+        //renderer.setSize(window.innerWidth, window.innerHeight);
+
+         // Adam added (start)
+        //camera.aspect = player.currentWidth()/player.currentHeight();
+        //camera.updateProjectionMatrix();
+        //console.log(player.currentWidth());
+        //renderer.setSize(player.currentWidth(),player.currentHeight());
+        //Adam add (end)
+
+      //}
+
 
     </script>
 
