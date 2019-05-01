@@ -2,6 +2,12 @@ html {
   overflow: auto;
 }
 
+#broadcast_video {
+  width: 95%;
+  margin: 20px;
+  position: relative;
+  display: inline;
+}
 
 label {
   display: inline;
