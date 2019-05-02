@@ -15,26 +15,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
     <script src="//vjs.zencdn.net/7.3.0/video.min.js"></script>
-
-    <!--<link rel="shortcut icon" href="">-->
-    <!--<style>
-      html, body{
-        width: 100%
-        height: 100%
-        margin: 0;
-      }
-      body{
-        font-family: Monospace;
-        background-color: #f0f0f0;
-        overflow: hidden;
-
-    </style>-->
   </head>
   <body style="background-color:black;">
   <div id="container" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 640px;">
-    <video id="live_video1" class="video-js vjs-default-skin" crossorigin="anonymous">
-    </video>
-    <!--<video id="live_video1" width="640" height="360" crossorigin="anonymous" control playsinline></video>-->
+    <video id="live_video1" class="video-js vjs-default-skin" crossorigin="anonymous"></video>
   </div>
 
     <script src="/node_modules/videojs-vr/dist/videojs-vr.min.js"></script>
@@ -42,24 +26,17 @@
     <script src="/three.js"></script>
     <script src="/DeviceOrientationControls.js"></script>
     <script src="/CSS3DRenderer.js"></script>
-
     <script src="/socket.io/socket.io.js"></script>
     <script src="/view.js"></script>
-    <!--<script src="/watch.js"></script>-->
-    <!--<script src="/sendDemo.js"></script>-->
 
     <script>
         var video1 = document.getElementById('live_video1');
-        //var video1 = document.createElement('video');
-        //video1.crossOrigin = 'anonymous';
         video1.width = 640;
         video1.height = 360;
         video1.loop = true;
         video1.muted = true;
-        //video1.id = "live_video";
         video1.controls = true;
         video1.setAttribute('playsinline', '');
-        //video1.play();
 
       let peerConnection;
       socket.on('offer', function(id, description) {
@@ -137,7 +114,6 @@
         mobile = isMobile();
 
         container = document.getElementById('container');
-        // camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1100);
         camera = new THREE.PerspectiveCamera(75, player.currentWidth()/player.currentHeight(), 1, 1100); // Adam added
         if(mobile){
           controls = new THREE.DeviceOrientationControls( camera );
@@ -151,24 +127,7 @@
 
         geometry.scale(-1, 1, 1);
 
-        /*video1.crossOrigin = 'anonymous';
-        video1.width = 640;
-        video1.height = 360;
-        video1.loop = true;
-        video1.muted = true;
-        video1.setAttribute('playsinline', '');*/
-
-        //video1.play(); // Adam commented it out
-
-
-        //var player = videojs('live_video1'); // Adam added
-
-        //video1.player.play(); // Adam added
-
-
-        //var texture = new THREE.VideoTexture(video1); // Adam commented out
         var texture = new THREE.VideoTexture(player.el().getElementsByTagName('video')[0]); // Adam added
-        // console.log(player.el().getElementsByTagName('video')[0]);
         var material = new THREE.MeshBasicMaterial( { map: texture } );
 
         mesh = new THREE.Mesh(geometry, material);
@@ -177,7 +136,6 @@
         renderer = new THREE.WebGLRenderer(); // not sure if we should add antialias to true saw online that it might be good for vr
         renderer.setPixelRatio(window.devicePixelRatio);
         renderer.setSize(player.currentWidth(), player.currentHeight(), false);
-        //renderer.setSize(window.innerWidth, window.innerHeight); // used before videojs
         // Adam Adds
         var renderedCanvas = renderer.domElement;
 
@@ -186,12 +144,7 @@
         player.el().insertBefore(renderedCanvas, player.el().firstChild);
         player.el().getElementsByTagName('video')[0].style.display = 'none';
         player.el().getElementsByTagName('video')[0].play();
-        //player.el().getElementsByTagName('video')[0].style.display = '';
-        //player.controlBar.fullscreenToggle.show();
         // end Adam Adds
-
-
-        //container.appendChild(renderer.domElement); // what was done before videojs
 
         document.addEventListener( 'mousedown', onDocumentMouseDown, false );
 				document.addEventListener( 'mousemove', onDocumentMouseMove, false );
@@ -201,27 +154,8 @@
         document.addEventListener( 'touchmove', onDocumentMouseMove, false);
         document.addEventListener( 'touchend', onDocumentMouseUp, false);*/
 
-
-       // window.addEventListener('resize', onWindowResize, false); // Adam took away the event listener because the videjs canvas deals with this for us??
-
       }
 
-			//function onWindowResize() {
-        //alert("hi2");
-				//camera.aspect = window.innerWidth / window.innerHeight;
-				//camera.updateProjectionMatrix();
-
-				//renderer.setSize( window.innerWidth, window.innerHeight );
-        //console.log("hello");
-        // Adam added (start)
-
-        //camera.aspect = player.currentWidth()/player.currentHeight();
-        //camera.updateProjectionMatrix();
-        //renderer.setSize(player.currentWidth(),player.currentHeight());
-        //Adam add (end)
-
-
-		//	}
     document.addEventListener('fullscreenchange', fullscreenHandler);
 
       function fullscreenHandler( event ){
@@ -241,7 +175,7 @@
           //current_screen = true;
         }
         if(is_full_screen){
-         // console.log("fs");
+        // console.log("fs");
         // means full screen
         camera.aspect = window.innerWidth/window.innerHeight;
         camera.updateProjectionMatrix();
@@ -251,8 +185,8 @@
 
         }else{
           //console.log("nfs");
-          console.log("player width:",width);
-          console.log("player height:", height);
+          //console.log("player width:",width);
+          //console.log("player height:", height);
 
           camera.aspect = width/height;
           camera.updateProjectionMatrix();
@@ -278,7 +212,6 @@
 			function onDocumentMouseMove( event ) {
 
 				if ( isUserInteracting === true ) {
-
 					lon = ( onPointerDownPointerX - event.clientX ) * 0.1 + onPointerDownLon;
 					lat = ( event.clientY - onPointerDownPointerY ) * 0.1 + onPointerDownLat;
 
@@ -349,23 +282,6 @@
 
 			}
 
-      //function onWindowResize(){
-        //console.log("hello1");
-        //camera.aspect = window.innerWidth / window.innerHeight;
-        //camera.updateProjectionMatrix();
-        //renderer.setSize(window.innerWidth, window.innerHeight);
-
-         // Adam added (start)
-        //camera.aspect = player.currentWidth()/player.currentHeight();
-        //camera.updateProjectionMatrix();
-        //console.log(player.currentWidth());
-        //renderer.setSize(player.currentWidth(),player.currentHeight());
-        //Adam add (end)
-
-      //}
-
-
     </script>
-
     </body>
 </html>
