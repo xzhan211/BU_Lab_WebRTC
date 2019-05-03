@@ -1,37 +1,4 @@
 'use strict';
-
-/*
-class SenderAPI{
-  constructor(){
-    this.conn = null;
-  }
-
-  init(){
-    let peer = new Peer();
-    console.log("XXX-> "+ peer);
-    let flag = true;
-    socket.on('peerId_test', function(data) {
-      let receivedPeerId = data;
-      console.log("This peerId is from broadcast part >>  "+receivedPeerId);
-      this.conn = peer.connect(receivedPeerId);
-      this.conn.on('open', () => {
-        this.conn.send('Done');
-      });
-    });
-  }
-
-
-  async sendParameter(parameter){
-    if(this.conn === null)
-    console.log("**** " + parameter);
-    if(this.conn !== null)
-    this.conn.send(parameter);
-  }
-}
-*/
-
-
-
 /*
 1. just copy below part in your js code
 2. add your js file path in watch.html
@@ -39,13 +6,14 @@ class SenderAPI{
 let receivedPeerId = null;
 let conn = null;
 let peer = new Peer();
-
+let idCnt = 1;
 socket.on('peerId_test', function(data) {
     receivedPeerId = data;
     console.log("This peerId is from broadcast part >>  "+receivedPeerId);
     conn = peer.connect(receivedPeerId);
     conn.on('open', () => {
-      conn.send('Done');
+      //conn.send('Done');
+      console.log("Data channel ready!");
     });
 });
 
@@ -58,12 +26,30 @@ my example, how to use conn.send(msg)
 4. data can be dispalyed in console from broadcast side
 */
 function user(){
-    console.log("test >>");
-    let dd = new Date();
-  let sentence ="time:" + dd.getTime() + "aaaa-aaaaa-aaaaaaaa-aaaaaaaaaaaaa-aaaaaaaaaaaaaaaaaaaa-aaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbb-cccccccccccccccccccccccccccccccccccccc-ccccccccccccccccccccccccccccccccccccccccccccccccccccccccc";
-    //for(let i=0; i<2000; i++)
-    conn.send(sentence);
+    /*
+    let obj = {
+      unix_time_with_ms: idCnt,
+      quaternion: [1111.1111, 2222.2222, 3333.3333, 4444.4444]
+    }
+    */
+    let obj = {
+      unix_time_with_ms: idCnt,
+      yaw: 200,
+      pitch: 400
+    }
+    conn.send(JSON.stringify(obj));
+    idCnt++;
+    /*
+    let iter = setInterval(function(){
+      let obj = {
+        unix_time_with_ms: idCnt,
+        quaternion: [1111.1111, 2222.2222, 3333.3333, 4444.4444]
+      }
+      conn.send(JSON.stringify(obj));
+      idCnt++;
+    }, 5);
+    */
 }
 
-let clearMsgsButton = document.getElementById("clearMsgsButton");
-clearMsgsButton.addEventListener('click', user);
+let sendMsgsButton = document.getElementById("sendButton");
+sendMsgsButton.addEventListener('click', user);
