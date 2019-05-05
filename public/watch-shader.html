@@ -28,90 +28,6 @@
     <script src="/CSS3DRenderer.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="/view.js"></script>
-    <!-- <script>
-  var camera, scene, renderer;
-  var geometry, material, mesh;
-
-  var image = new Image;
-  image.crossOrigin = 'anonymous';
-  image.onload = function () {
-    var texture = new THREE.Texture(image);
-    texture.needsUpdate = true;
-
-    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
-    scene = new THREE.Scene();
-
-    geometry = new THREE.BoxGeometry(200, 200, 200);
-    material = new THREE.ShaderMaterial({
-      side: THREE.BackSide,
-      uniforms: {
-        map: {
-          type: 't', value: texture
-        },
-        placement: {
-          type: 'v3', value: new THREE.Vector3
-        }
-      },
-      vertexShader: '\
-        varying vec3 worldPosition;\n\
-        void main () {\n\
-          vec4 p = vec4 (position, 1.0);\n\
-          worldPosition = (modelMatrix * p).xyz;\n\
-          gl_Position = projectionMatrix * modelViewMatrix * p;\n\
-        }',
-      fragmentShader: '\
-        uniform sampler2D map;\n\
-        uniform vec3 placement;\n\
-        varying vec3 worldPosition;\n\
-        const float seamWidth = 0.01;\n\
-        void main () {\n\
-          vec3 R = worldPosition - placement;\n\
-          float r = length (R);\n\
-          float c = -R.y / r;\n\
-          float theta = acos (c);\n\
-          float phi = atan (R.x, -R.z);\n\
-          float seam = \n\
-          	max (0.0, 1.0 - abs (R.x / r) / seamWidth) *\n\
-            clamp (1.0 + (R.z / r) / seamWidth, 0.0, 1.0);\n\
-          gl_FragColor = texture2D (map, vec2 (\n\
-            0.5 + phi / 6.2831852,\n\
-            theta / 3.1415926\n\
-          ), -2.0 * log2(1.0 + c * c) -12.3 * seam);\n\
-        }'
-    });
-
-    mesh = new THREE.Mesh(geometry, material);
-    scene.add(mesh);
-
-    renderer = new THREE.WebGLRenderer();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-
-    document.body.appendChild(renderer.domElement);
-
-    animate();
-  };
-  image.src = 'https://i.imgur.com/Uwwf6c9.jpg';
-
-  var mX = 0, mY = 0, mT = new THREE.Vector3;
-  window.addEventListener('mousemove', function (e) {
-    mX = 2 * e.clientX / window.innerWidth - 1;
-    mY = 2 * e.clientY / window.innerHeight - 1;
-  });
-
-  function animate() {
-
-    requestAnimationFrame(animate);
-
-    mT.x = mX;
-    mT.y = mY;
-    mT.z = 1 - 0.8 * mY * mY;
-
-    camera.lookAt(mT);
-
-    renderer.render(scene, camera);
-
-  }
-    </script> -->
     <script>
         var video1 = document.getElementById('live_video1');
         video1.width = 640;
@@ -206,14 +122,7 @@
 
         scene = new THREE.Scene();
 
-         //var geometry = new THREE.SphereBufferGeometry(500, 60, 40);
-
-         // ---------- other code from artcile
-        // camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
-        // scene = new THREE.Scene();
-
         var geometry = new THREE.BoxGeometry(200, 200, 200);
-
         var texture = new THREE.VideoTexture(player.el().getElementsByTagName('video')[0]); // Adam added
 
          material = new THREE.ShaderMaterial({
@@ -253,12 +162,6 @@
           ), -2.0 * log2(1.0 + c * c) -12.3 * seam);\n\
         }'
         });
-        //--------------
-
-        //geometry.scale(-1, 1, 1);
-
-        //var texture = new THREE.VideoTexture(player.el().getElementsByTagName('video')[0]); // Adam added
-        //var material = new THREE.MeshBasicMaterial( { map: texture } );
 
         mesh = new THREE.Mesh(geometry, material);
 
