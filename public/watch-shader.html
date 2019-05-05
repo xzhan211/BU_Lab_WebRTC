@@ -9,7 +9,6 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
     integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
   <link href="//vjs.zencdn.net/7.3.0/video-js.min.css" rel="stylesheet">
-
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
     integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
   </script>
@@ -26,7 +25,6 @@
   <div id="container" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 640px;">
     <video id="live_video1" class="video-js vjs-default-skin" crossorigin="anonymous"></video>
   </div>
-
   <script src="/node_modules/videojs-vr/dist/videojs-vr.min.js"></script>
   <script src="https://unpkg.com/peerjs@1.0.0/dist/peerjs.min.js"></script>
   <script src="/three.js"></script>
@@ -192,7 +190,6 @@
 
       var renderedCanvas = renderer.domElement;
 
-      // The line below will make the canvas full screen
       renderedCanvas.setAttribute('style', 'width: 100%; height: 100%; position: absolute; top:0;');
       player.el().insertBefore(renderedCanvas, player.el().firstChild);
       player.el().getElementsByTagName('video')[0].style.display = 'none';
@@ -216,9 +213,6 @@
     document.addEventListener('fullscreenchange', fullscreenHandler);
 
     function fullscreenHandler(event) {
-      console.log("handleFullscreenChange");
-      console.log(event);
-
       const width = player.currentWidth();
       const height = player.currentHeight();
 
@@ -228,8 +222,6 @@
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth, window.innerHeight, false);
-        console.log("player width:", window.innerWidth);
-        console.log("player height:", window.innerHeight);
 
       } else {
         camera.aspect = width / height;
@@ -310,10 +302,12 @@
       }
       if (conn != null) {
         conn.send(JSON.stringify(obj));
-        /*conn.send('---- phi, theta ----');
-        conn.send(phi);
-        conn.send(theta);
-        conn.send('--------------------');*/
+        /*
+          conn.send('---- phi, theta ----');
+          conn.send(phi);
+          conn.send(theta);
+          conn.send('--------------------');
+         */
       }
 
       camera.position.x = distance * Math.sin(phi) * Math.cos(theta);
