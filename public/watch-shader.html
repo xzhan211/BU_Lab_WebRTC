@@ -97,9 +97,11 @@
 
 
     var camera, scene, renderer, controls, mobile;
+
     var player = videojs('#live_video1', {
       techOrder: ['html5']
-    }); // Adam added
+    });
+
     var is_full_screen = false;
 
     var isUserInteracting = false,
@@ -129,7 +131,7 @@
       mobile = isMobile();
 
       container = document.getElementById('container');
-      camera = new THREE.PerspectiveCamera(75, player.currentWidth() / player.currentHeight(), 1, 1000); // Adam added
+      camera = new THREE.PerspectiveCamera(75, player.currentWidth() / player.currentHeight(), 1, 1000);
       if (mobile) {
         controls = new THREE.DeviceOrientationControls(camera);
       } else {
@@ -139,7 +141,7 @@
       scene = new THREE.Scene();
 
       var geometry = new THREE.BoxGeometry(200, 200, 200);
-      var texture = new THREE.VideoTexture(player.el().getElementsByTagName('video')[0]); // Adam added
+      var texture = new THREE.VideoTexture(player.el().getElementsByTagName('video')[0]);
 
       material = new THREE.ShaderMaterial({
         side: THREE.BackSide,
@@ -184,11 +186,10 @@
       mesh = new THREE.Mesh(geometry, material);
 
       scene.add(mesh);
-      renderer = new THREE
-    .WebGLRenderer(); // not sure if we should add antialias to true saw online that it might be good for vr
+      renderer = new THREE.WebGLRenderer();
       renderer.setPixelRatio(window.devicePixelRatio);
       renderer.setSize(player.currentWidth(), player.currentHeight(), false);
-      // Adam Adds
+
       var renderedCanvas = renderer.domElement;
 
       // The line below will make the canvas full screen
@@ -196,15 +197,18 @@
       player.el().insertBefore(renderedCanvas, player.el().firstChild);
       player.el().getElementsByTagName('video')[0].style.display = 'none';
       player.el().getElementsByTagName('video')[0].play();
-      // end Adam Adds
 
       document.addEventListener('mousedown', onDocumentMouseDown, false);
       document.addEventListener('mousemove', onDocumentMouseMove, false);
       document.addEventListener('mouseup', onDocumentMouseUp, false);
       document.addEventListener('wheel', onDocumentMouseWheel, false);
-      /*document.addEventListener( 'touchstart', onDocumentMouseDown, false);
-      document.addEventListener( 'touchmove', onDocumentMouseMove, false);
-      document.addEventListener( 'touchend', onDocumentMouseUp, false);*/
+      /*
+        // May want to use for later if we decide to also have touch android
+        // orientation controls on mobile devices
+        document.addEventListener( 'touchstart', onDocumentMouseDown, false);
+        document.addEventListener( 'touchmove', onDocumentMouseMove, false);
+        document.addEventListener( 'touchend', onDocumentMouseUp, false);
+      */
 
 
     }
@@ -218,18 +222,9 @@
       const width = player.currentWidth();
       const height = player.currentHeight();
 
+      is_full_screen = (is_full_screen)? false:true;
+
       if (is_full_screen) {
-        //console.log("Full screen to Not full screen");
-        is_full_screen = false;
-        // current_screen = false;
-      } else {
-        //console.log("Not full screen to Full screen");
-        is_full_screen = true;
-        //current_screen = true;
-      }
-      if (is_full_screen) {
-        // console.log("fs");
-        // means full screen
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth, window.innerHeight, false);
@@ -237,10 +232,6 @@
         console.log("player height:", window.innerHeight);
 
       } else {
-        //console.log("nfs");
-        //console.log("player width:",width);
-        //console.log("player height:", height);
-
         camera.aspect = width / height;
         camera.updateProjectionMatrix();
         renderer.setSize(width, height, false);
@@ -336,5 +327,4 @@
     }
   </script>
 </body>
-
 </html>
