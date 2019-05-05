@@ -206,14 +206,17 @@
 
         scene = new THREE.Scene();
 
-         var geometry = new THREE.SphereBufferGeometry(500, 60, 40);
+         //var geometry = new THREE.SphereBufferGeometry(500, 60, 40);
 
          // ---------- other code from artcile
         // camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
         // scene = new THREE.Scene();
 
-        //geometry = new THREE.BoxGeometry(200, 200, 200);
-        material = new THREE.ShaderMaterial({
+        var geometry = new THREE.BoxGeometry(200, 200, 200);
+
+        var texture = new THREE.VideoTexture(player.el().getElementsByTagName('video')[0]); // Adam added
+
+         material = new THREE.ShaderMaterial({
           side: THREE.BackSide,
           uniforms: {
             map: {
@@ -252,10 +255,10 @@
         });
         //--------------
 
-        geometry.scale(-1, 1, 1);
+        //geometry.scale(-1, 1, 1);
 
-        var texture = new THREE.VideoTexture(player.el().getElementsByTagName('video')[0]); // Adam added
-        var material = new THREE.MeshBasicMaterial( { map: texture } );
+        //var texture = new THREE.VideoTexture(player.el().getElementsByTagName('video')[0]); // Adam added
+        //var material = new THREE.MeshBasicMaterial( { map: texture } );
 
         mesh = new THREE.Mesh(geometry, material);
 
