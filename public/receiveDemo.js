@@ -28,11 +28,15 @@ peer.on('open', function(id){
   console.log("broadcaster_side id >> "+ peer.id);
 });
 
+let cntMobile = 0;
+let cntLaptop = 0;
+
 peer.on('connection', (conn) => {
   conn.on('data', (data) => {
+    let obj = JSON.parse(data);
     console.log("++++++++++++++");
     if(q.size() < queueSize){
-      q.addItem(data);
+      q.addItem(obj);
       console.log("new item >> " + q.checkFirstItem());
       console.log("cur size >> " + q.size());
 
@@ -43,7 +47,25 @@ peer.on('connection', (conn) => {
     console.log("add time >> "+d.getTime());
 
     // store in DB
-    indexedDBAdd("laptop", data);
+    if(obj.hasOwnProperty("quaternion")){
+      cntMobile++;
+      indexedDBAdd("mobile", obj);
+    }else if(obj.hasOwnProperty("yaw")){
+      cntLaptop++;
+      indexedDBAdd("laptop", obj);
+    }
+
+    if(cntMobile >= 20){
+      cntMobile = 0;
+      indexedDBDownload("mobile");
+
+    }
+
+    if(cntLaptop >= 20){
+      cntLaptop = 0;
+      indexedDBDownload("laptop");
+    }
+
   });
 });
 
@@ -72,12 +94,14 @@ let readDBButton = document.getElementById("readDB");
 let readAllDBButton = document.getElementById("readAllDB");
 //let addDBButton = document.getElementById("addDB");
 let removeDBButton = document.getElementById("removeDB");
+let removeAllDBButton = document.getElementById("removeAllDB");
 
 
 readDBButton.addEventListener('click', readF);
 readAllDBButton.addEventListener('click', readAllF);
 //addDBButton.addEventListener('click', addF);
 removeDBButton.addEventListener('click', removeF);
+removeAllDBButton.addEventListener('click', removeAllF);
 
 function readF(){
   console.log("readF");
@@ -103,4 +127,10 @@ function removeF(){
   let tn = prompt("please input table name","mobile or laptop");
   let kv = prompt("please input key value", "eg. 10");
   indexedDBRemove(tn, parseInt(kv));
+}
+
+function removeAllF(){
+  console.log("removeAllF");
+  let tn = prompt("please input table name","mobile or laptop");
+  indexedDBRemoveAll(tn);
 }

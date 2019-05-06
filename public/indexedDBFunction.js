@@ -95,17 +95,16 @@ function indexedDBReadAll(tableName) {
 
 function indexedDBAdd(tableName, obj) {
   let request;
-  let parseData = JSON.parse(obj);
   if(tableName.localeCompare("laptop")===0){
     request = db.transaction([tableName], "readwrite")
       .objectStore(tableName)
-      .add({unix_time_with_ms: parseData.unix_time_with_ms, yaw: parseData.yaw, pitch: parseData.pitch});
-    console.log("Add in DB >> " + parseData.unix_time_with_ms + " ::: " + parseData.yaw + " ::: " + parseData.pitch);
+      .add({unix_time_with_ms: obj.unix_time_with_ms, yaw: obj.yaw, pitch: obj.pitch});
+    console.log("Add in DB >> " + obj.unix_time_with_ms + " ::: " + obj.yaw + " ::: " + obj.pitch);
   }else if(tableName.localeCompare("mobile")===0){
     request = db.transaction([tableName], "readwrite")
       .objectStore(tableName)
-      .add({unix_time_with_ms: parseData.unix_time_with_ms, quaternion: parseData.quaternion});
-    console.log("Add in DB >> " + parseData.unix_time_with_ms + " ::: " + parseData.quaternion);
+      .add({unix_time_with_ms: obj.unix_time_with_ms, quaternion: obj.quaternion});
+    console.log("Add in DB >> " + obj.unix_time_with_ms + " ::: " + obj.quaternion);
   }
   request.onsuccess = function(event) {
     console.log("New data has been added to your database.");
@@ -123,5 +122,63 @@ function indexedDBRemove(tableName, keyValue) {
 
   request.onsuccess = function(event) {
     console.log(keyValue + "'s entry has been removed from your table: " + tableName);
+  };
+}
+
+function indexedDBRemoveAll(tableName) {
+   let objectStore = db.transaction(tableName).objectStore(tableName);
+   objectStore.openCursor().onsuccess = function(event) {
+      var cursor = event.target.result;
+      if(tableName.localeCompare("laptop")===0){
+        if (cursor) {
+          indexedDBRemove("laptop", cursor.key);
+          cursor.continue();
+        } else {
+          console.log("No more entries in " + tableName + "!");
+        }
+      }else if(tableName.localeCompare("mobile")===0){
+        if (cursor) {
+          indexedDBRemove("mobile", cursor.key);
+          cursor.continue();
+        } else {
+          console.log("No more entries in " + tableName + "!");
+        }
+      }
+   };
+}
+
+function indexedDBDownload(tableName) {
+  let objectStore = db.transaction(tableName).objectStore(tableName);
+  let arr = [];
+  objectStore.openCursor().onsuccess = function(event) {
+      //let arr = [];
+      let cursor = event.target.result;
+      if(tableName.localeCompare("laptop")===0){
+        if (cursor) {
+          arr.push(cursor.key + '-' + cursor.value.yaw + '-' + cursor.value.pitch);
+          indexedDBRemove("laptop", cursor.key);
+          cursor.continue();
+        } else {
+          console.log("No more entries in " + tableName + "!");
+        }
+      }else if(tableName.localeCompare("mobile")===0){
+        if (cursor) {
+          arr.push(cursor.key + '-' + cursor.value.quaternion);
+          //console.log("time: " + cursor.key + ", quaternion: " + cursor.value.quaternion);
+          indexedDBRemove("mobile", cursor.key);
+          cursor.continue();
+        } else {
+          console.log("No more entries in " + tableName + "!");
+        }
+      }
+      console.log(arr);
+      if(arr.length === 20){
+        let buffer = new Blob([arr], {type: "text/plain;charset=utf-8"});
+        if(tableName.localeCompare("laptop")===0){
+          saveAs(buffer, "laptopData.txt");
+        }else if(tableName.localeCompare("mobile")===0){
+          saveAs(buffer, "mobileData.txt");
+        }
+      }
   };
 }
