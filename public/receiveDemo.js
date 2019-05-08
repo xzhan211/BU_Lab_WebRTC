@@ -54,17 +54,18 @@ peer.on('connection', (conn) => {
       cntLaptop++;
       indexedDBAdd("laptop", obj);
     }
-
-    if(cntMobile >= 20){
+    /*
+    if(cntMobile >= downloadSize){
       cntMobile = 0;
       indexedDBDownload("mobile");
 
     }
 
-    if(cntLaptop >= 20){
+    if(cntLaptop >= downloadSize){
       cntLaptop = 0;
       indexedDBDownload("laptop");
     }
+    */
 
   });
 });

@@ -27,33 +27,40 @@ my example, how to use conn.send(msg)
 */
 function user(){
 
+  // demo: mobile
+  /*
     let obj = {
       unix_time_with_ms: idCnt,
       quaternion: [1111.1111, 2222.2222, 3333.3333, 4444.4444]
     }
+  */
 
+  // demo: laptop
   /*
     let obj = {
       unix_time_with_ms: idCnt,
       yaw: 200,
       pitch: 400
     }
-  */
 
     conn.send(JSON.stringify(obj));
     idCnt++;
+  */
+
+  /* above is for manual*/
+
+  /* below is for auto*/
 
 
-    /*
     let iter = setInterval(function(){
       let obj = {
         unix_time_with_ms: idCnt,
-        quaternion: [1111.1111, 2222.2222, 3333.3333, 4444.4444]
+        quaternion: [1111, 2222, 3333, 4444]
       }
       conn.send(JSON.stringify(obj));
       idCnt++;
     }, 5);
-    */
+
 }
 
 let sendMsgsButton = document.getElementById("sendButton");

@@ -6,6 +6,8 @@ window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndex
 window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
 window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
 
+const downloadSize = 12000;
+
 if (!window.indexedDB) {
    console.log("Your browser doesn't support a stable version of IndexedDB.")
 }
@@ -56,7 +58,7 @@ function indexedDBRead(tableName, keyValue) {
   request.onerror = function(event) {
     console.log("Unable to retrieve daa from database!");
   };
-
+/*
   request.onsuccess = function(event) {
     // Do something with the request.result!
     console.log(tableName+": ");
@@ -69,6 +71,7 @@ function indexedDBRead(tableName, keyValue) {
         console.log(keyValue + ", this primary key  couldn't be found in your database!");
     }
   };
+  */
 }
 
 function indexedDBReadAll(tableName) {
@@ -99,16 +102,18 @@ function indexedDBAdd(tableName, obj) {
     request = db.transaction([tableName], "readwrite")
       .objectStore(tableName)
       .add({unix_time_with_ms: obj.unix_time_with_ms, yaw: obj.yaw, pitch: obj.pitch});
-    console.log("Add in DB >> " + obj.unix_time_with_ms + " ::: " + obj.yaw + " ::: " + obj.pitch);
+    //console.log("Add in DB >> " + obj.unix_time_with_ms + " ::: " + obj.yaw + " ::: " + obj.pitch);
   }else if(tableName.localeCompare("mobile")===0){
     request = db.transaction([tableName], "readwrite")
       .objectStore(tableName)
       .add({unix_time_with_ms: obj.unix_time_with_ms, quaternion: obj.quaternion});
-    console.log("Add in DB >> " + obj.unix_time_with_ms + " ::: " + obj.quaternion);
+    //console.log("Add in DB >> " + obj.unix_time_with_ms + " ::: " + obj.quaternion);
   }
+  /*
   request.onsuccess = function(event) {
     console.log("New data has been added to your database.");
   };
+  */
 
   request.onerror = function(event) {
     console.log("Unable to add data in your database! ");
@@ -119,10 +124,11 @@ function indexedDBRemove(tableName, keyValue) {
   var request = db.transaction([tableName], "readwrite")
    .objectStore(tableName)
    .delete(keyValue);
-
+  /*
   request.onsuccess = function(event) {
     console.log(keyValue + "'s entry has been removed from your table: " + tableName);
   };
+  */
 }
 
 function indexedDBRemoveAll(tableName) {
@@ -169,16 +175,26 @@ function indexedDBDownload(tableName) {
           cursor.continue();
         } else {
           console.log("No more entries in " + tableName + "!");
+          console.log(arr);
+          let buffer = new Blob([arr], {type: "text/plain;charset=utf-8"});
+          if(tableName.localeCompare("laptop")===0){
+            saveAs(buffer, "laptopData.txt");
+          }else if(tableName.localeCompare("mobile")===0){
+            saveAs(buffer, "mobileData.txt");
+          }
+          console.log("download ok!");
         }
       }
-      console.log(arr);
-      if(arr.length === 20){
+      //console.log(arr);
+      //if(arr.length === downloadSize){
+        /*
         let buffer = new Blob([arr], {type: "text/plain;charset=utf-8"});
         if(tableName.localeCompare("laptop")===0){
           saveAs(buffer, "laptopData.txt");
         }else if(tableName.localeCompare("mobile")===0){
           saveAs(buffer, "mobileData.txt");
         }
-      }
+        */
+      //}
   };
 }
