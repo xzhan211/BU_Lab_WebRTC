@@ -96,39 +96,40 @@ function indexedDBReadAll(tableName) {
    };
 }
 
-function indexedDBAdd(tableName, obj) {
+async function indexedDBAdd(tableName, obj) {
   let request;
   if(tableName.localeCompare("laptop")===0){
-    request = db.transaction([tableName], "readwrite")
+    request = await db.transaction([tableName], "readwrite")
       .objectStore(tableName)
       .add({unix_time_with_ms: obj.unix_time_with_ms, yaw: obj.yaw, pitch: obj.pitch});
-    //console.log("Add in DB >> " + obj.unix_time_with_ms + " ::: " + obj.yaw + " ::: " + obj.pitch);
+    console.log("Add in DB >> " + obj.unix_time_with_ms + " ::: " + obj.yaw + " ::: " + obj.pitch);
   }else if(tableName.localeCompare("mobile")===0){
-    request = db.transaction([tableName], "readwrite")
+    request = await db.transaction([tableName], "readwrite")
       .objectStore(tableName)
       .add({unix_time_with_ms: obj.unix_time_with_ms, quaternion: obj.quaternion});
-    //console.log("Add in DB >> " + obj.unix_time_with_ms + " ::: " + obj.quaternion);
+    console.log("Add in DB >> " + obj.unix_time_with_ms + " ::: " + obj.quaternion);
   }
   /*
-  request.onsuccess = function(event) {
+  request.onsuccess = await function(event) {
     console.log("New data has been added to your database.");
   };
-  */
 
-  request.onerror = function(event) {
+
+  request.onerror = await function(event) {
     console.log("Unable to add data in your database! ");
   };
+  */
 }
 
 function indexedDBRemove(tableName, keyValue) {
   var request = db.transaction([tableName], "readwrite")
    .objectStore(tableName)
    .delete(keyValue);
-  /*
+
   request.onsuccess = function(event) {
     console.log(keyValue + "'s entry has been removed from your table: " + tableName);
   };
-  */
+
 }
 
 function indexedDBRemoveAll(tableName) {

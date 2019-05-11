@@ -1,5 +1,6 @@
 'use strict';
 let peer = new Peer();
+//let obj;
 const queueSize = 200;
 function Queue(){
   this.data = [];
@@ -31,22 +32,22 @@ peer.on('open', function(id){
 let cntMobile = 0;
 let cntLaptop = 0;
 
-peer.on('connection', (conn) => {
-  conn.on('data', (data) => {
-    let obj = JSON.parse(data);
-    console.log("++++++++++++++");
-    if(q.size() < queueSize){
-      q.addItem(obj);
-      console.log("new item >> " + q.checkFirstItem());
-      console.log("cur size >> " + q.size());
-
-    }else{
-      console.log("Queue is full, discard new data!");
-    }
-    let d = new Date();
-    console.log("add time >> "+d.getTime());
+  peer.on('connection', (conn) => {
+    conn.on('data', (data) => {
+      let obj = JSON.parse(data);
+      console.log("++++++++++++++");
+      if(q.size() < queueSize){
+        q.addItem(obj);
+        console.log("new item >> " + q.checkFirstItem());
+        console.log("cur size >> " + q.size());
+      }else{
+        console.log("Queue is full, discard new data!");
+      }
+      let d = new Date();
+      console.log("add time >> "+d.getTime());
 
     // store in DB
+
     if(obj.hasOwnProperty("quaternion")){
       cntMobile++;
       indexedDBAdd("mobile", obj);
@@ -54,11 +55,11 @@ peer.on('connection', (conn) => {
       cntLaptop++;
       indexedDBAdd("laptop", obj);
     }
+
     /*
     if(cntMobile >= downloadSize){
       cntMobile = 0;
       indexedDBDownload("mobile");
-
     }
 
     if(cntLaptop >= downloadSize){
@@ -66,9 +67,8 @@ peer.on('connection', (conn) => {
       indexedDBDownload("laptop");
     }
     */
-
+    });
   });
-});
 
 //let getItemButton = document.getElementById("clearMsgsButton");
 //getItemButton.addEventListener('click', getAndRemoveItem);
