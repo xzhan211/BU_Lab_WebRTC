@@ -181,7 +181,7 @@ function getMedia(constraints) {
 Frame rate
 Bit rate
 */
-
+/*
 const test1 = document.querySelector('#set');
 test1.onclick = () => {
     getFrameRate();
@@ -202,7 +202,7 @@ function getBitRate(){
   let bitRate = document.getElementById("bitRate").value;
   console.log("bit rate >> "+ bitRate);
 }
-
+*/
 
 /*
 camera select, local camera vs extend camerat
@@ -221,7 +221,7 @@ function getCamIDs(){
         videoSelect.appendChild(option);
       }
     }
-    console.log(deviceInfos);
+    //console.log(deviceInfos);
   });
 }
 

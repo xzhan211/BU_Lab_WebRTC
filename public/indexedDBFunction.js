@@ -13,6 +13,16 @@ if (!window.indexedDB) {
 }
 
 
+navigator.webkitTemporaryStorage.queryUsageAndQuota (
+  function(usedBytes, grantedBytes) {
+    console.log('we are using ', usedBytes, ' of ', grantedBytes, 'bytes');
+  },
+  function(e) { console.log('Error', e);  }
+);
+
+
+
+
 /*
 const employeeData = [
    { id: "00-01", name: "gopal", age: 35, email: "gopal@tutorialspoint.com" },
@@ -48,8 +58,7 @@ request.onupgradeneeded = function(event) {
    }
    */
 }
-
-function indexedDBRead(tableName, keyValue) {
+async function indexedDBRead(tableName, keyValue) {
   //let kv = keyValue.toString();
   let transaction = db.transaction([tableName]);
   let objectStore = transaction.objectStore(tableName);
@@ -58,8 +67,8 @@ function indexedDBRead(tableName, keyValue) {
   request.onerror = function(event) {
     console.log("Unable to retrieve daa from database!");
   };
-/*
-  request.onsuccess = function(event) {
+
+  request.onsuccess = await function(event) {
     // Do something with the request.result!
     console.log(tableName+": ");
     if(request.result) {
@@ -71,12 +80,12 @@ function indexedDBRead(tableName, keyValue) {
         console.log(keyValue + ", this primary key  couldn't be found in your database!");
     }
   };
-  */
+
 }
 
-function indexedDBReadAll(tableName) {
+async function indexedDBReadAll(tableName) {
    let objectStore = db.transaction(tableName).objectStore(tableName);
-   objectStore.openCursor().onsuccess = function(event) {
+   objectStore.openCursor().onsuccess = await function(event) {
       var cursor = event.target.result;
       if(tableName.localeCompare("laptop")===0){
         if (cursor) {
@@ -113,28 +122,29 @@ async function indexedDBAdd(tableName, obj) {
   request.onsuccess = await function(event) {
     console.log("New data has been added to your database.");
   };
-
-
-  request.onerror = await function(event) {
+  */
+  request.onerror = function(event) {
     console.log("Unable to add data in your database! ");
   };
-  */
 }
 
-function indexedDBRemove(tableName, keyValue) {
-  var request = db.transaction([tableName], "readwrite")
+async function indexedDBRemove(tableName, keyValue) {
+  var request = await db.transaction([tableName], "readwrite")
    .objectStore(tableName)
    .delete(keyValue);
-
+  /*
   request.onsuccess = function(event) {
     console.log(keyValue + "'s entry has been removed from your table: " + tableName);
   };
-
+  */
+  request.onerror = function(event) {
+    console.log("Unable to delete data from your database! ");
+  };
 }
 
-function indexedDBRemoveAll(tableName) {
+async function indexedDBRemoveAll(tableName) {
    let objectStore = db.transaction(tableName).objectStore(tableName);
-   objectStore.openCursor().onsuccess = function(event) {
+   objectStore.openCursor().onsuccess = await function(event) {
       var cursor = event.target.result;
       if(tableName.localeCompare("laptop")===0){
         if (cursor) {
@@ -154,10 +164,11 @@ function indexedDBRemoveAll(tableName) {
    };
 }
 
-function indexedDBDownload(tableName) {
+async function indexedDBDownload(tableName) {
   let objectStore = db.transaction(tableName).objectStore(tableName);
   let arr = [];
-  objectStore.openCursor().onsuccess = function(event) {
+  console.log("downloading...please wait...");
+  objectStore.openCursor().onsuccess = await function(event) {
       //let arr = [];
       let cursor = event.target.result;
       if(tableName.localeCompare("laptop")===0){
@@ -167,6 +178,9 @@ function indexedDBDownload(tableName) {
           cursor.continue();
         } else {
           console.log("No more entries in " + tableName + "!");
+          let buffer = new Blob([arr], {type: "text/plain;charset=utf-8"});
+          saveAs(buffer, "laptopData.txt");
+          console.log("download ok!");
         }
       }else if(tableName.localeCompare("mobile")===0){
         if (cursor) {
@@ -176,15 +190,11 @@ function indexedDBDownload(tableName) {
           cursor.continue();
         } else {
           console.log("No more entries in " + tableName + "!");
-          console.log(arr);
           let buffer = new Blob([arr], {type: "text/plain;charset=utf-8"});
-          if(tableName.localeCompare("laptop")===0){
-            saveAs(buffer, "laptopData.txt");
-          }else if(tableName.localeCompare("mobile")===0){
-            saveAs(buffer, "mobileData.txt");
-          }
+          saveAs(buffer, "mobileData.txt");
           console.log("download ok!");
         }
+          //console.log(arr);
       }
       //console.log(arr);
       //if(arr.length === downloadSize){
