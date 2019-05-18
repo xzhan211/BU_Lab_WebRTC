@@ -24,9 +24,19 @@ Queue.prototype.size = function(){
 
 const q = new Queue();
 
-peer.on('open', function(id){
-  socket.emit('peerId_test', peer.id);
+//socket.on('request_broadcast_id', function(data){
+//  console.log('>> '+data);
+//});
+
+peer.on('open', function(){
+  //let iter = setInterval(function(){
   console.log("broadcaster_side id >> "+ peer.id);
+
+  socket.on('request_broadcast_id', function(data){
+    console.log('receive view id >> '+data);
+    socket.emit('peerId_test', peer.id);
+  });
+  //}, 1000);
 });
 
 let cntMobile = 0;

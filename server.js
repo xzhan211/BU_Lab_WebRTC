@@ -46,5 +46,11 @@ io.sockets.on('connection', function (socket) {
     socket.broadcast.emit('peerId_test', msg);
   });
 
+  socket.on('request_broadcast_id', function(msg){
+    //console.log('peerId_test >> I am in!');
+    //console.log(msg);
+    socket.broadcast.emit('request_broadcast_id', msg);
+  });
+
 });
 server.listen(port, () => console.log(`Server is running on port ${port}`));
