@@ -8,7 +8,9 @@ socket.on('offer', function(id, description) {
 	.then(sdp => peerConnection.setLocalDescription(sdp))
 	.then(function () {
 		socket.emit('answer', id, peerConnection.localDescription);
-	});
+	  //console.log("watch &&&&&&&&& --> "+ peerConnection.localDescription);
+	  //console.log("watch id &&&&&&&&& --> "+ id);
+  });
 	peerConnection.onaddstream = function(event) {
 		video.srcObject = event.stream;
 	};

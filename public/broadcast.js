@@ -17,6 +17,8 @@ let allID = new Map();
 
 socket.on('answer', function(id, description) {
 	peerConnections[id].setRemoteDescription(description);
+  //console.log("broadcast &&&&&&--> "+description);
+  //console.log("broadcast id &&&&&&--> "+ id);
 });
 
 socket.on('watcher', function(id) {
@@ -24,7 +26,7 @@ socket.on('watcher', function(id) {
 	peerConnections[id] = peerConnection;
 	peerConnection.addStream(video.srcObject);
 	peerConnection.createOffer()
-	.then(sdp => {peerConnection.setLocalDescription(sdp); console.log(sdp)})
+	.then(sdp => {peerConnection.setLocalDescription(sdp); /*console.log(sdp)*/})
 	.then(function () {
 		socket.emit('offer', id, peerConnection.localDescription);
 	});
@@ -168,7 +170,7 @@ example2, set frame rate
 var constraints = { video: { frameRate: { ideal: 10, max: 15 } } };
 */
 function getMedia(constraints) {
-    console.log("read videoSource (Id) in getMedia >> " + videoSource);
+    //console.log("read videoSource (Id) in getMedia >> " + videoSource);
     navigator.mediaDevices.getUserMedia(constraints)
     .then(function(stream) {
 	  video.srcObject = stream;

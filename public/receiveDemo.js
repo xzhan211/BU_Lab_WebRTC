@@ -30,11 +30,12 @@ const q = new Queue();
 
 peer.on('open', function(){
   //let iter = setInterval(function(){
-  console.log("broadcaster_side id >> "+ peer.id);
-
+  //console.log("broadcaster_side peer id >> "+ peer.id);
+  //console.log("broadcaster_side socket id >> "+ socket.id);
+  socket.emit('set_broadcast_id');
   socket.on('request_broadcast_id', function(data){
     console.log('receive view id >> '+data);
-    socket.emit('peerId_test', peer.id);
+    socket.emit('peerId_test', peer.id, '/#'+data);
   });
   //}, 1000);
 });

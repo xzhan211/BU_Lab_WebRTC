@@ -7,12 +7,13 @@ let receivedPeerId = null;
 let conn = null;
 let peer = new Peer();
 let idCnt = 1;
-let receiveOnce = 0;
+//let receiveOnce = 0;
 
 
 // I don't know why it has to use a setTimeout here...
 setTimeout(function(){
-  socket.emit('request_broadcast_id', peer.id);
+  //console.log('step 1 > '+ socket.id);
+  socket.emit('request_broadcast_id', socket.id);
 }, 1000);
 
 socket.on('peerId_test', function(data) {
@@ -23,7 +24,7 @@ socket.on('peerId_test', function(data) {
       conn = peer.connect(receivedPeerId);
       //let c = 10000000;
       //while(c-- > 0);
-      console.log('down >> '+conn);
+      //console.log('down >> '+conn);
       conn.on('open', () => {
         //conn.send('Done');
         console.log("Data channel ready!");
