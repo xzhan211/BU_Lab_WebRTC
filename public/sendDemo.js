@@ -6,13 +6,14 @@
 let receivedPeerId = null;
 let conn = null;
 let peer = new Peer();
-let idCnt = 1;
+let localPeerId = null;
 //let receiveOnce = 0;
 
 
 // I don't know why it has to use a setTimeout here...
 setTimeout(function(){
   //console.log('step 1 > '+ socket.id);
+  localPeerId = socket.id;
   socket.emit('request_broadcast_id', socket.id);
 }, 1000);
 
@@ -67,16 +68,45 @@ function user(){
   /* below is for auto*/
 
 
+    let idCnt = 0;
     let iter = setInterval(function(){
       let obj = {
         unix_time_with_ms: idCnt,
-        quaternion: [1111, 2222, 3333, 4444]
+        quaternion: [1111, 1111, 1111, 1111],
+        peer_id: localPeerId
       }
       conn.send(JSON.stringify(obj));
       idCnt++;
-    }, 5);
-
+    }, 50);
 }
+
+
+function user2(){
+    let idCnt = 70000;
+    let iter = setInterval(function(){
+      /*
+      let obj = {
+        unix_time_with_ms: idCnt,
+        yaw: 9999,
+        pitch: 8888,
+        peer_id: localPeerId
+      }
+      */
+      let obj = {
+        unix_time_with_ms: idCnt,
+        quaternion: [7777, 7777, 7777, 7777],
+        peer_id: localPeerId
+      }
+      conn.send(JSON.stringify(obj));
+      idCnt++;
+    }, 50);
+}
+
 
 let sendMsgsButton = document.getElementById("sendButton");
 sendMsgsButton.addEventListener('click', user);
+
+
+
+let clearMsgsButton = document.getElementById("clearMsgsButton");
+clearMsgsButton.addEventListener('click', user2);
