@@ -12,6 +12,8 @@ if (!window.indexedDB) {
    console.log("Your browser doesn't support a stable version of IndexedDB.")
 }
 
+window.indexedDB.deleteDatabase('webrtcDB');
+
 
 navigator.webkitTemporaryStorage.queryUsageAndQuota (
   function(usedBytes, grantedBytes) {
@@ -21,6 +23,8 @@ navigator.webkitTemporaryStorage.queryUsageAndQuota (
 );
 
 
+let time = new Date();
+console.log("time >> "+time.getTime());
 let db;
 let request = window.indexedDB.open("webrtcDB", 1);
 
@@ -49,12 +53,12 @@ request.onupgradeneeded = function(event) {
 }
 async function indexedDBRead(tableName, keyValue) {
   //let kv = keyValue.toString();
-  let transaction = db.transaction([tableName]);
+  let transaction = db.transaction([tableName], 'readonly');
   let objectStore = transaction.objectStore(tableName);
   let request = objectStore.get(keyValue);
 
   request.onerror = function(event) {
-    console.log("Unable to retrieve daa from database!");
+    console.log("Unable to retrieve data from database!");
   };
 
   request.onsuccess = await function(event) {
@@ -62,11 +66,11 @@ async function indexedDBRead(tableName, keyValue) {
     console.log(tableName+": ");
     if(request.result) {
       if(tableName.localeCompare("laptop")===0){
-        console.log("time: " + request.result.unix_time_with_ms + ", yaw: " + request.result.yaw + ", pitch: " + request.result.pitch + ", peerId: " + request.result.peer_id);
+        console.log("time: " + request.result.time + ", yaw: " + request.result.yaw + ", pitch: " + request.result.pitch + ", peerId: " + request.result.peerId);
       }else if(tableName.localeCompare("mobile")===0){
-        console.log("time: " + request.result.unix_time_with_ms + ", quaternion: " + request.result.quaternion + ", peerId: " + request.result.peer_id);
+        console.log("time: " + request.result.time + ", quaternion: " + request.result.quaternion + ", peerId: " + request.result.peerId);
       }else
-        console.log(keyValue + ", this primary key  couldn't be found in your database!");
+        console.log(keyValue + ", this primary key couldn't be found in your database!");
     }
   };
 
@@ -78,14 +82,14 @@ async function indexedDBReadAll(tableName) {
       var cursor = event.target.result;
       if(tableName.localeCompare("laptop")===0){
         if (cursor) {
-          console.log("time: " + cursor.key + ", yaw: " + cursor.value.yaw + ", pitch: " + cursor.value.pitch + ", peerId: " + cursor.value.peer_id);
+          console.log("key: " + cursor.key + ", time: " + cursor.value.time + ", yaw: " + cursor.value.yaw + ", pitch: " + cursor.value.pitch + ", peerId: " + cursor.value.peerId);
           cursor.continue();
         } else {
           console.log("No more entries in " + tableName + "!");
         }
       }else if(tableName.localeCompare("mobile")===0){
         if (cursor) {
-          console.log("time: " + cursor.key + ", quaternion: " + cursor.value.quaternion + ", peerId: " + cursor.value.peer_id);
+          console.log("key: " + cursor.key + ", time: " + cursor.value.time + ", quaternion: " + cursor.value.quaternion + ", peerId: " + cursor.value.peerId);
           cursor.continue();
         } else {
           console.log("No more entries in " + tableName + "!");
@@ -97,15 +101,17 @@ async function indexedDBReadAll(tableName) {
 async function indexedDBAdd(tableName, obj) {
   let request;
   if(tableName.localeCompare("laptop")===0){
-    request = await db.transaction([tableName], "readwrite")
-      .objectStore(tableName)
-    .add({unix_time_with_ms: obj.unix_time_with_ms, yaw: obj.yaw, pitch: obj.pitch, peerId: obj.peer_id});
     await console.log("Add in DB >> " + obj.unix_time_with_ms + " ::: " + obj.yaw + " ::: " + obj.pitch + " ::: " + obj.peer_id);
-  }else if(tableName.localeCompare("mobile")===0){
     request = await db.transaction([tableName], "readwrite")
       .objectStore(tableName)
-    .add({unix_time_with_ms: obj.unix_time_with_ms, quaternion: obj.quaternion, peerId: obj.peer_id});
+    .add({time: obj.unix_time_with_ms, yaw: obj.yaw, pitch: obj.pitch, peerId: obj.peer_id});
+    //await console.log("Add in DB >> " + obj.unix_time_with_ms + " ::: " + obj.yaw + " ::: " + obj.pitch + " ::: " + obj.peer_id);
+  }else if(tableName.localeCompare("mobile")===0){
     await console.log("Add in DB >> " + obj.unix_time_with_ms + " ::: " + obj.quaternion + " ::: " + obj.peer_id);
+    request = await db.transaction([tableName], "readwrite")
+      .objectStore(tableName)
+    .add({time: obj.unix_time_with_ms, quaternion: obj.quaternion, peerId: obj.peer_id});
+    //await console.log("Add in DB >> " + obj.unix_time_with_ms + " ::: " + obj.quaternion + " ::: " + obj.peer_id);
   }
   /*
   request.onsuccess = await function(event) {
@@ -118,17 +124,20 @@ async function indexedDBAdd(tableName, obj) {
 }
 
 async function indexedDBRemove(tableName, keyValue) {
+  /*
   var request = await db.transaction([tableName], "readwrite")
    .objectStore(tableName)
    .delete(keyValue);
-  /*
+
   request.onsuccess = function(event) {
     console.log(keyValue + "'s entry has been removed from your table: " + tableName);
   };
-  */
+
   request.onerror = function(event) {
     console.log("Unable to delete data from your database! ");
   };
+  */
+  console.log('remove this function');
 }
 
 async function indexedDBRemoveAll(tableName) {
@@ -137,26 +146,6 @@ async function indexedDBRemoveAll(tableName) {
    request.onsuccess = await function(event){
       console.log("all data are cleared in "+tableName);
    };
-   /*
-   objectStore.openCursor().onsuccess = await function(event) {
-      var cursor = event.target.result;
-      if(tableName.localeCompare("laptop")===0){
-        if (cursor) {
-          indexedDBRemove("laptop", cursor.key);
-          cursor.continue();
-        } else {
-          console.log("No more entries in " + tableName + "!");
-        }
-      }else if(tableName.localeCompare("mobile")===0){
-        if (cursor) {
-          indexedDBRemove("mobile", cursor.key);
-          cursor.continue();
-        } else {
-          console.log("No more entries in " + tableName + "!");
-        }
-      }
-   };
-   */
 }
 
 async function indexedDBDownload(tableName) {
@@ -164,12 +153,10 @@ async function indexedDBDownload(tableName) {
   let arr = [];
   console.log("downloading...please wait...");
   objectStore.openCursor().onsuccess = await function(event) {
-      //let arr = [];
       let cursor = event.target.result;
       if(tableName.localeCompare("laptop")===0){
         if (cursor) {
-          arr.push(cursor.key + '-' + cursor.value.yaw + '-' + cursor.value.pitch + '-' + cursor.value.peerId);
-          //indexedDBRemove("laptop", cursor.key);
+          arr.push(cursor.key + '@' + cursor.value.time + '@' + cursor.value.yaw + '@' + cursor.value.pitch + '@' + cursor.value.peerId);
           cursor.continue();
         } else {
           console.log("No more entries in " + tableName + "!");
@@ -180,8 +167,7 @@ async function indexedDBDownload(tableName) {
         }
       }else if(tableName.localeCompare("mobile")===0){
         if (cursor) {
-          arr.push(cursor.key + '-' + cursor.value.quaternion + '-' + cursor.value.peerId);
-          //indexedDBRemove("mobile", cursor.key);
+          arr.push(cursor.key + '@' + cursor.value.time + '@' + cursor.value.quaternion + '@' + cursor.value.peerId);
           cursor.continue();
         } else {
           console.log("No more entries in " + tableName + "!");
@@ -190,18 +176,6 @@ async function indexedDBDownload(tableName) {
           saveAs(buffer, "mobileData.txt");
           console.log("download ok!");
         }
-          //console.log(arr);
       }
-      //console.log(arr);
-      //if(arr.length === downloadSize){
-        /*
-        let buffer = new Blob([arr], {type: "text/plain;charset=utf-8"});
-        if(tableName.localeCompare("laptop")===0){
-          saveAs(buffer, "laptopData.txt");
-        }else if(tableName.localeCompare("mobile")===0){
-          saveAs(buffer, "mobileData.txt");
-        }
-        */
-      //}
   };
 }

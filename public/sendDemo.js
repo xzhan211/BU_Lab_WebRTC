@@ -77,7 +77,7 @@ function user(){
       }
       conn.send(JSON.stringify(obj));
       idCnt++;
-    }, 50);
+    }, 500);
 }
 
 
@@ -99,7 +99,7 @@ function user2(){
       }
       conn.send(JSON.stringify(obj));
       idCnt++;
-    }, 50);
+    }, 500);
 }
 
 
