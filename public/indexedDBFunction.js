@@ -73,9 +73,9 @@ async function indexedDBRead(tableName, keyValue) {
         console.log(keyValue + ", this primary key couldn't be found in your database!");
     }
   };
-
 }
 
+/*
 async function indexedDBReadAll(tableName) {
    let objectStore = db.transaction(tableName).objectStore(tableName);
    objectStore.openCursor().onsuccess = await function(event) {
@@ -97,17 +97,33 @@ async function indexedDBReadAll(tableName) {
       }
    };
 }
+*/
+
+async function indexedDBReadAll(tableName) {
+  let transaction = db.transaction([tableName], 'readonly');
+  let objectStore = transaction.objectStore(tableName);
+  objectStore.getAll().onsuccess = function(event){
+    console.log(event.target.result);
+    /*
+    for( e of event.target.result){
+      console.log(e);
+    }
+    */
+  };
+}
+
+
+
+
 
 async function indexedDBAdd(tableName, obj) {
   let request;
   if(tableName.localeCompare("laptop")===0){
-    await console.log("Add in DB >> " + obj.unix_time_with_ms + " ::: " + obj.yaw + " ::: " + obj.pitch + " ::: " + obj.peer_id);
     request = await db.transaction([tableName], "readwrite")
       .objectStore(tableName)
     .add({time: obj.unix_time_with_ms, yaw: obj.yaw, pitch: obj.pitch, peerId: obj.peer_id});
     //await console.log("Add in DB >> " + obj.unix_time_with_ms + " ::: " + obj.yaw + " ::: " + obj.pitch + " ::: " + obj.peer_id);
   }else if(tableName.localeCompare("mobile")===0){
-    await console.log("Add in DB >> " + obj.unix_time_with_ms + " ::: " + obj.quaternion + " ::: " + obj.peer_id);
     request = await db.transaction([tableName], "readwrite")
       .objectStore(tableName)
     .add({time: obj.unix_time_with_ms, quaternion: obj.quaternion, peerId: obj.peer_id});
@@ -152,6 +168,23 @@ async function indexedDBDownload(tableName) {
   let objectStore = db.transaction(tableName).objectStore(tableName);
   let arr = [];
   console.log("downloading...please wait...");
+  objectStore.getAll().onsuccess = function(event){
+    console.log("No more entries in " + tableName + "!");
+      for(e of event.target.result){
+        arr.push(JSON.stringify(e));
+        //console.log(JSON.stringify(e));
+      }
+    let buffer = new Blob([arr], {type: "text/plain;charset=utf-8"});
+    if(tableName.localeCompare("laptop") === 0){
+      saveAs(buffer, "laptopData.txt");
+    }else if(tableName.localeCompare("mobile") === 0){
+      saveAs(buffer, "mobileData.txt");
+    }
+    console.log("download ok!");
+    indexedDBRemoveAll(tableName);
+  };
+
+  /*
   objectStore.openCursor().onsuccess = await function(event) {
       let cursor = event.target.result;
       if(tableName.localeCompare("laptop")===0){
@@ -178,4 +211,5 @@ async function indexedDBDownload(tableName) {
         }
       }
   };
+  */
 }
