@@ -43,6 +43,7 @@ my example, how to use conn.send(msg)
 */
 function user(){
   // demo: mobile
+    console.log("click send button");
     let idCnt = 1;
     let iter = setInterval(function(){
       let obj = {
@@ -57,6 +58,7 @@ function user(){
 
 
 function user2(){
+    console.log("click clear button");
     let idCnt = 1;
     let iter = setInterval(function(){
       let obj = {

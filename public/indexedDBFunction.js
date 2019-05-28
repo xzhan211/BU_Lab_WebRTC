@@ -6,7 +6,7 @@ window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndex
 window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
 window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
 
-const downloadSize = 12000;
+let largeArr = [];
 
 if (!window.indexedDB) {
    console.log("Your browser doesn't support a stable version of IndexedDB.")
@@ -122,11 +122,13 @@ async function indexedDBAdd(tableName, obj) {
     request = await db.transaction([tableName], "readwrite")
       .objectStore(tableName)
     .add({time: obj.unix_time_with_ms, yaw: obj.yaw, pitch: obj.pitch, peerId: obj.peer_id});
+    largeArr.push(JSON.stringify({time: obj.unix_time_with_ms, yaw: obj.yaw, pitch: obj.pitch, peerId: obj.peer_id}));
     //await console.log("Add in DB >> " + obj.unix_time_with_ms + " ::: " + obj.yaw + " ::: " + obj.pitch + " ::: " + obj.peer_id);
   }else if(tableName.localeCompare("mobile")===0){
     request = await db.transaction([tableName], "readwrite")
       .objectStore(tableName)
     .add({time: obj.unix_time_with_ms, quaternion: obj.quaternion, peerId: obj.peer_id});
+    largeArr.push(JSON.stringify({time: obj.unix_time_with_ms, quaternion: obj.quaternion, peerId: obj.peer_id}));
     //await console.log("Add in DB >> " + obj.unix_time_with_ms + " ::: " + obj.quaternion + " ::: " + obj.peer_id);
   }
   /*
@@ -168,12 +170,15 @@ async function indexedDBDownload(tableName) {
   let objectStore = db.transaction(tableName).objectStore(tableName);
   let arr = [];
   console.log("downloading...please wait...");
+  //better solution
+  /*
   objectStore.getAll().onsuccess = function(event){
     console.log("No more entries in " + tableName + "!");
-      for(e of event.target.result){
-        arr.push(JSON.stringify(e));
-        //console.log(JSON.stringify(e));
-      }
+
+    for(e of event.target.result){
+      arr.push(JSON.stringify(e));
+    }
+
     let buffer = new Blob([arr], {type: "text/plain;charset=utf-8"});
     if(tableName.localeCompare("laptop") === 0){
       saveAs(buffer, "laptopData.txt");
@@ -183,7 +188,20 @@ async function indexedDBDownload(tableName) {
     console.log("download ok!");
     indexedDBRemoveAll(tableName);
   };
+  */
 
+  //using large array as buffer
+  let buffer = new Blob([largeArr], {type: "text/plain;charset=utf-8"});
+  if(tableName.localeCompare("laptop") === 0){
+    saveAs(buffer, "laptopData.txt");
+  }else if(tableName.localeCompare("mobile") === 0){
+    saveAs(buffer, "mobileData.txt");
+  }
+  console.log("download ok!");
+  largeArr = [];
+  indexedDBRemoveAll(tableName);
+
+  //poor solution
   /*
   objectStore.openCursor().onsuccess = await function(event) {
       let cursor = event.target.result;
