@@ -9,6 +9,7 @@ video1.setAttribute('playsinline', '');
 
 let peerConnection;
 socket.on('offer', function(id, description) {
+
   peerConnection = new RTCPeerConnection(config);
   peerConnection.setRemoteDescription(description)
   .then(() => peerConnection.createAnswer())

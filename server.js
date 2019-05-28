@@ -5,10 +5,11 @@ const app = express();
 let broadcaster;
 let server;
 let port;
+let broadcastId;
 if (credentials.key && credentials.cert) {
   const https = require('https');
   server = https.createServer(credentials, app);
-  port = 443; // we use this, since in Chrome, it is required to use 'https' when calling local camera
+  port = 666; // we use this, since in Chrome, it is required to use 'https' when calling local camera
 } else {
   const http = require('http');
   server = http.createServer(app);
@@ -21,6 +22,7 @@ io.sockets.on('connection', function (socket) {
   console.log("test>> a user connected");
   socket.on('broadcaster', function () {
     broadcaster = socket.id;
+    //console.log("broadcast socket id > "+ broadcaster);
     socket.broadcast.emit('broadcaster');
   });
   socket.on('watcher', function () {
@@ -40,11 +42,20 @@ io.sockets.on('connection', function (socket) {
     broadcaster && socket.to(broadcaster).emit('bye', socket.id);
   });
   //test zxy
-  socket.on('peerId_test', function(msg){
-    console.log('peerId_test >> I am in!');
-    console.log(msg);
-    socket.broadcast.emit('peerId_test', msg);
+  socket.on('peerId_test', function(peerId, clientId){
+    //console.log('step 3 peer id > '+ peerId);
+    //console.log('step 3 socket id > '+ clientId);
+    socket.to(clientId).emit('peerId_test', peerId);
   });
 
+  socket.on('request_broadcast_id', function (clientId) {
+    console.log("step 2 > "+ clientId);
+    broadcaster && socket.to(broadcaster).emit('request_broadcast_id', clientId);
+  });
+
+  socket.on('set_broadcast_id', function(){
+    broadcastId = socket.id;
+    console.log("step 0 > " + broadcaster);
+  });
 });
 server.listen(port, () => console.log(`Server is running on port ${port}`));
