@@ -46,7 +46,7 @@ socket.on('broadcaster', function() {
 socket.on('bye', function() {
   peerConnection.close();
 });
-
+/*
 let receivedPeerId = null;
 let conn = null;
 let peer = new Peer();
@@ -56,6 +56,7 @@ socket.on('peerId_test', function(data) {
     console.log("This peerId is from broadcast part >>  "+receivedPeerId);
     conn = peer.connect(receivedPeerId);
     conn.on('open', () => {
-      conn.send('Done');
+      //conn.send('Done');
     });
 });
+*/

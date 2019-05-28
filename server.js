@@ -9,7 +9,7 @@ let broadcastId;
 if (credentials.key && credentials.cert) {
   const https = require('https');
   server = https.createServer(credentials, app);
-  port = 666; // we use this, since in Chrome, it is required to use 'https' when calling local camera
+  port = 443; // we use this, since in Chrome, it is required to use 'https' when calling local camera
 } else {
   const http = require('http');
   server = http.createServer(app);
@@ -43,19 +43,15 @@ io.sockets.on('connection', function (socket) {
   });
   //test zxy
   socket.on('peerId_test', function(peerId, clientId){
-    //console.log('step 3 peer id > '+ peerId);
-    //console.log('step 3 socket id > '+ clientId);
     socket.to(clientId).emit('peerId_test', peerId);
   });
 
   socket.on('request_broadcast_id', function (clientId) {
-    console.log("step 2 > "+ clientId);
     broadcaster && socket.to(broadcaster).emit('request_broadcast_id', clientId);
   });
 
   socket.on('set_broadcast_id', function(){
     broadcastId = socket.id;
-    console.log("step 0 > " + broadcaster);
   });
 });
 server.listen(port, () => console.log(`Server is running on port ${port}`));

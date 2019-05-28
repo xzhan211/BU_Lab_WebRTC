@@ -44,7 +44,7 @@ socket.on('broadcaster', function () {
 socket.on('bye', function () {
   peerConnection.close();
 });
-
+/*
 let receivedPeerId = null;
 let conn = null;
 let peer = new Peer();
@@ -54,10 +54,10 @@ socket.on('peerId_test', function (data) {
   console.log("This peerId is from broadcast part >>  " + receivedPeerId);
   conn = peer.connect(receivedPeerId);
   conn.on('open', () => {
-    conn.send('Done');
+    //conn.send('Done');
   });
 });
-
+*/
 
 var camera, scene, renderer, controls, mobile;
 
@@ -242,8 +242,9 @@ function animate() {
     controls.update();
     let dd = new Date();
     let obj = {
-      'unix_time_with_ms': dd,
-      'quaternion': [controls.getX(), controls.getY(), controls.getZ(), controls.getW()]
+      'unix_time_with_ms': dd.getTime(),
+      'quaternion': [controls.getX(), controls.getY(), controls.getZ(), controls.getW()],
+      'peer_id': localPeerId
     }
     if (conn != null) {
       conn.send(JSON.stringify(obj));
@@ -261,9 +262,10 @@ function update() {
   theta = THREE.Math.degToRad(lon);
   let dd = new Date();
   let obj = {
-    'unix_time_with_ms': dd,
+    'unix_time_with_ms': dd.getTime(),
     'yaw': phi,
-    'pitch': theta
+    'pitch': theta,
+    'peer_id': localPeerId
   }
   if (conn != null) {
     conn.send(JSON.stringify(obj));

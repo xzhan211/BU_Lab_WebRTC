@@ -6,7 +6,8 @@ window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndex
 window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
 window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
 
-let largeArr = [];
+let largeArr_laptop = [];
+let largeArr_mobile = [];
 
 if (!window.indexedDB) {
    console.log("Your browser doesn't support a stable version of IndexedDB.")
@@ -122,13 +123,13 @@ async function indexedDBAdd(tableName, obj) {
     request = await db.transaction([tableName], "readwrite")
       .objectStore(tableName)
     .add({time: obj.unix_time_with_ms, yaw: obj.yaw, pitch: obj.pitch, peerId: obj.peer_id});
-    largeArr.push(JSON.stringify({time: obj.unix_time_with_ms, yaw: obj.yaw, pitch: obj.pitch, peerId: obj.peer_id}));
+    largeArr_laptop.push(JSON.stringify({time: obj.unix_time_with_ms, yaw: obj.yaw, pitch: obj.pitch, peerId: obj.peer_id}));
     //await console.log("Add in DB >> " + obj.unix_time_with_ms + " ::: " + obj.yaw + " ::: " + obj.pitch + " ::: " + obj.peer_id);
   }else if(tableName.localeCompare("mobile")===0){
     request = await db.transaction([tableName], "readwrite")
       .objectStore(tableName)
     .add({time: obj.unix_time_with_ms, quaternion: obj.quaternion, peerId: obj.peer_id});
-    largeArr.push(JSON.stringify({time: obj.unix_time_with_ms, quaternion: obj.quaternion, peerId: obj.peer_id}));
+    largeArr_mobile.push(JSON.stringify({time: obj.unix_time_with_ms, quaternion: obj.quaternion, peerId: obj.peer_id}));
     //await console.log("Add in DB >> " + obj.unix_time_with_ms + " ::: " + obj.quaternion + " ::: " + obj.peer_id);
   }
   /*
@@ -191,14 +192,16 @@ async function indexedDBDownload(tableName) {
   */
 
   //using large array as buffer
-  let buffer = new Blob([largeArr], {type: "text/plain;charset=utf-8"});
   if(tableName.localeCompare("laptop") === 0){
-    saveAs(buffer, "laptopData.txt");
+    let buffer1 = new Blob([largeArr_laptop], {type: "text/plain;charset=utf-8"});
+    saveAs(buffer1, "laptopData.txt");
+    largeArr_laptop = [];
   }else if(tableName.localeCompare("mobile") === 0){
-    saveAs(buffer, "mobileData.txt");
+    let buffer2 = new Blob([largeArr_mobile], {type: "text/plain;charset=utf-8"});
+    saveAs(buffer2, "mobileData.txt");
+    largeArr_mobile = [];
   }
   console.log("download ok!");
-  largeArr = [];
   indexedDBRemoveAll(tableName);
 
   //poor solution

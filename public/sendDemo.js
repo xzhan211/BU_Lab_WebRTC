@@ -41,6 +41,7 @@ my example, how to use conn.send(msg)
 3. click "Clear Msgs" button in viewer side, send 0~9 to broadcast side
 4. data can be dispalyed in console from broadcast side
 */
+/*
 function user(){
   // demo: mobile
     console.log("click send button");
@@ -80,3 +81,4 @@ sendMsgsButton.addEventListener('click', user);
 
 let clearMsgsButton = document.getElementById("clearMsgsButton");
 clearMsgsButton.addEventListener('click', user2);
+*/

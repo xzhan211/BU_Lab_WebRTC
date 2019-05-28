@@ -20,37 +20,9 @@
           <div class="col">
             <form>
               <h4 id="test">Peer to Peer: Broadcaster </h4>
-                <label for="resolution">RESOLUTION:</label>
-                <p id="resolution">--</p>
-              <!--
-              <p>
-                <label for="frameRate">FRAME RATE:</label>
-                <input type="TEXT" class="frameRate" id="frameRate" value="20">
-              </p>
-              <p>
-                <label for="bitRate">BIT RATE:</label>
-                <input type="TEXT" class="bitRate" id="bitRate" value="20">
-              </p>
-              <p>
-                <label for="para4">para4</label>
-                <input type="TEXT" class="para4" id="para4" value="20">
-              </p>
-              <p>
-                <label for="para5">para5</label>
-                <input type="TEXT" class="para5" id="para5" value="20">
-              </p>
-              <p>
-                <label for="para6">para6</label>
-                <input type="TEXT" class="para6" id="para6" value="20">
-              </p>
-              <p>
-                <label for="para7">para7</label>
-                <input type="TEXT" class="para7" id="para7" value="20">
-              </p>
-              -->
+              <label for="resolution">RESOLUTION:</label>
+              <p id="resolution">--</p>
               <p class="buttons">
-                <!--<input class="btn btn-primary btn-lg" type="button" id="set" value="Set">-->
-                <!--<input class="btn btn-primary btn-lg" type="button" id="default" value="Default">-->
                 <input class="btn btn-primary btn-lg" type="button" id="exportButton" value="download"/>
               </p>
 
@@ -59,15 +31,7 @@
           <div class="col-8">
             <video id="broadcast_video" controls playsinline autoplay muted></video>
             <div id="sol_btns">
-              <!--<button class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Select Camera
-              </button>-->
-              <!--<div class="dropdown-menu">-->
-              <!--<a class="dropdown-item" id="firstCam"> -- </a>-->
-              <!--<a class="dropdown-item" id="secondCam"> -- </a>-->
-              <!--</div>-->
               <select id="videoSource"></select>
-              <!--<button class="btn btn-danger" id="default">Default</button>-->
               <button class="btn btn-success" id="reload">Reload</button>
               <button class="btn btn-danger" id="qvga">QVGA</button>
               <button class="btn btn-danger" id="vga">VGA</button>
@@ -80,31 +44,18 @@
         </div>
 
         <table class="display">
-          <!--<tr>-->
-          <!--<td class="title">Status:</td>-->
-          <!--<td class="title">Messages:</td>-->
-          <!--</tr>-->
           <tr>
-            <!--<td>-->
-              <!--<div id="receiver-id" style="font-weight: bold;" title="Copy this ID to the input on send.html.">ID:</div>-->
-            <!--</td>-->
             <td>
-              <!--<input type="text" id="sendMessageBox" placeholder="Enter a message..." autofocus="true" />-->
               <button type="button" id="sendButton">Send</button>
               <button type="button" id="clearMsgsButton">Clear Msgs (Local)</button>
             </td>
           </tr>
-          <!--<tr>-->
-            <!--<td><div id="status" class="status"></div></td>-->
-            <!--<td><div class="message" id="message"></div></td>-->
-          <!--</tr>-->
         </table>
-
-                <button type="button" id="readDB">Read </button>
-                <button type="button" id="readAllDB">Read all </button>
-                <button type="button" id="addDB">Add data </button>
-                <button type="button" id="removeDB">Delete data </button>
-                <button type="button" id="removeAllDB">Delete all data </button>
+        <button type="button" id="readDB">Read </button>
+        <button type="button" id="readAllDB">Read all </button>
+        <button type="button" id="addDB">Add data </button>
+        <button type="button" id="removeDB">Delete data </button>
+        <button type="button" id="removeAllDB">Delete all data </button>
     </div>
 
     <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/0.3.18/peer.min.js"></script>-->
@@ -117,6 +68,5 @@
     <script src="/receiveDemo.js"></script>
     <script type="text/javascript" src="/package/FileSaver.js" charset="utf-8"></script>
     <script src="/writeFile.js"></script>
-
   </body>
 </html>
