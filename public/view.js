@@ -12,4 +12,3 @@ const video = document.querySelector('video'); // eslint-disable-line no-unused-
 window.onunload = window.onbeforeunload = function() {
 	socket.close();
 };
-
