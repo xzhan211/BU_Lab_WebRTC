@@ -7,6 +7,7 @@ video1.controls = true;
 video1.autoplay = true;
 video1.setAttribute('playsinline', '');
 
+let lock = true;
 let peerConnection;
 socket.on('offer', function(id, description) {
 
@@ -36,16 +37,22 @@ socket.on('candidate', function(id, candidate) {
 });
 
 socket.on('connect', function() {
-  socket.emit('watcher');
+    socket.emit('watcher');
 });
 
+
 socket.on('broadcaster', function() {
-  socket.emit('watcher');
+    socket.emit('watcher');
 });
 
 socket.on('bye', function() {
-  peerConnection.close();
+    peerConnection.close();
 });
+
+
+
+
+
 /*
 let receivedPeerId = null;
 let conn = null;

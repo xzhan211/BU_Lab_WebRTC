@@ -1,51 +1,3 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-  <title>Viewer</title>
-  <meta name="description" content="WebRTC Video Broadcast.">
-  <meta charset='utf-8'>
-  <link href="/main.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-  <link href="//vjs.zencdn.net/7.3.0/video-js.min.css" rel="stylesheet">
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
-  </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
-    integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous">
-  </script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
-    integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous">
-  </script>
-  <script src="//vjs.zencdn.net/7.3.0/video.min.js"></script>
-</head>
-
-<body style="background-color:black;">
-  <div id="container" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 640px;">
-    <video id="live_video1" class="video-js vjs-default-skin" crossorigin="anonymous"></video>
-    <select id="vShader">
-      <option value="1">v1</option>
-    </select>
-    <select id="hShader">
-      <option value="1">h1</option>
-      <option value="2">h2</option>
-      <option value="3">h3</option>
-    </select>
-    <button id="startVedio">Start Vedio</button>
-  </div>
-
-
-  <script src="/node_modules/videojs-vr/dist/videojs-vr.min.js"></script>
-  <script src="https://unpkg.com/peerjs@1.0.0/dist/peerjs.min.js"></script>
-  <script src="/three.js"></script>
-  <script src="/DeviceOrientationControls.js"></script>
-  <script src="/CSS3DRenderer.js"></script>
-  <script src="/socket.io/socket.io.js"></script>
-  <script src="/view.js"></script>
-  <script src="/shaderLib.js"></script>
-  <script src="/watch-shader.js"></script>
-  <!--script>
     var video1 = document.getElementById('live_video1');
     video1.width = 640;
     video1.height = 640;
@@ -53,6 +5,10 @@
     video1.muted = true;
     video1.controls = true;
     video1.setAttribute('playsinline', '');
+
+    let vShader = "";
+    let hShader = "";
+
 
     let peerConnection;
     socket.on('offer', function (id, description) {
@@ -66,6 +22,28 @@
 
       peerConnection.onaddstream = function (event) {
         video1.srcObject = event.stream;
+
+        let vSelect = document.getElementById('vShader');
+        let vIndex = vSelect.selectedIndex;
+        let vVal = vSelect.options[vIndex].value;
+
+        let hSelect = document.getElementById('hShader');
+        let hIndex = hSelect.selectedIndex;
+        let hVal = hSelect.options[hIndex].value;
+
+        console.log("V Shader :"+vVal);
+        console.log("H Shader :"+hVal);
+
+        if(vVal == 1)
+          vShader = vertex_shader;
+
+        if(hVal == 1)
+          hShader = fragmentShader_equi;
+        else if(hVal == 2)
+          hShader = fragmentShader_baseball_equi_v2;
+        else if(hVal == 3)
+          hShader = fragmentShader_baseball_equi;
+
         init();
         animate();
       };
@@ -81,9 +59,20 @@
         .catch(e => console.error(e));
     });
 
+    /*
     socket.on('connect', function () {
       socket.emit('watcher');
     });
+    */
+
+    const startVedio = document.querySelector('#startVedio');
+    startVedio.onclick = () => {
+      console.log("click Start Vedio");
+      socket.emit('watcher');
+    }
+
+
+
 
     socket.on('broadcaster', function () {
       socket.emit('watcher');
@@ -138,6 +127,7 @@
       return check;
     }
 
+
     function init() {
       mobile = isMobile();
 
@@ -163,7 +153,8 @@
           }
         },
 
-        vertexShader: vertex_shader,
+        //vertexShader: vertex_shader,
+        vertexShader: vShader,
 
         /*
         vertexShader: '\
@@ -175,7 +166,8 @@
           gl_Position = projectionMatrix * modelViewMatrix * p;\n\
         }',
         */
-        fragmentShader: fragmentShader_equi
+        //fragmentShader: fragmentShader_equi
+        fragmentShader: hShader
         /*
         fragmentShader: '\
         uniform sampler2D map;\n\
@@ -331,6 +323,3 @@
       renderer.render(scene, camera);
 
     }
-  </scrip-->
-</body>
-</html>
