@@ -1,4 +1,3 @@
-//import yolo from 'tfjs-yolo'
 var video1 = document.getElementById('live_video1');
 video1.width = 640;
 video1.height = 360;
@@ -6,14 +5,6 @@ video1.loop = true;
 video1.muted = true;
 video1.controls = true;
 video1.setAttribute('playsinline', '');
-
-//let myYolo = await yolo.v1tiny();
-//let myYolo = await yolo.v2tiny();
-//let myYolo = await yolo.v3tiny();
-
-//let myYolo = await yolo.v3();
-
-//const boxes = await myYolo.predict(video1);
 
 let peerConnection;
 socket.on('offer', function (id, description) {
