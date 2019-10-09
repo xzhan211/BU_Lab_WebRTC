@@ -49,10 +49,10 @@ let cntLaptop = 0;
       //console.log("++++++++++++++");
       if(q.size() < queueSize){
         q.addItem(obj);
-        //console.log("new item >> " + q.checkFirstItem());
-        //console.log("cur size >> " + q.size());
+        console.log("new item >> " + q.checkFirstItem());
+        console.log("cur size >> " + q.size());
       }else{
-        //console.log("Queue is full, discard new data!");
+        console.log("Queue is full, discard new data!");
       }
       //let d = new Date();
       //console.log("add time >> "+d.getTime());

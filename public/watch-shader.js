@@ -81,7 +81,7 @@
     socket.on('bye', function () {
       peerConnection.close();
     });
-
+    /*
     let receivedPeerId = null;
     let conn = null;
     let peer = new Peer();
@@ -94,6 +94,7 @@
         conn.send('Done');
       });
     });
+    */
 
 
     var camera, scene, renderer, controls, mobile;

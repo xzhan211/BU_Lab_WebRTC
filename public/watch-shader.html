@@ -25,12 +25,12 @@
   <div id="container" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 640px;">
     <video id="live_video1" class="video-js vjs-default-skin" crossorigin="anonymous"></video>
     <select id="vShader">
-      <option value="1">v1</option>
+      <option value="1">vertex_shader</option>
     </select>
     <select id="hShader">
-      <option value="1">h1</option>
-      <option value="2">h2</option>
-      <option value="3">h3</option>
+      <option value="1">equi</option>
+      <option value="2">baseball_equi_v2</option>
+      <option value="3">baseball_equi</option>
     </select>
     <button id="startVedio">Start Vedio</button>
   </div>
@@ -45,6 +45,9 @@
   <script src="/view.js"></script>
   <script src="/shaderLib.js"></script>
   <script src="/watch-shader.js"></script>
+  <script src="/sendDemo.js"></script>
+
+
   <!--script>
     var video1 = document.getElementById('live_video1');
     video1.width = 640;

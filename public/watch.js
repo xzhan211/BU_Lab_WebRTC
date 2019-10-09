@@ -1,6 +1,6 @@
 var video1 = document.getElementById('live_video1');
 video1.width = 640;
-video1.height = 360;
+video1.height = 320;
 video1.loop = true;
 video1.muted = true;
 video1.controls = true;
