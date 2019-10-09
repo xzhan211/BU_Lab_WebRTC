@@ -1,3 +1,6 @@
+//import yolo from 'tfjs-yolo';
+//import * as tf from '@tensorflow/tfjs';
+
 var video1 = document.getElementById('live_video1');
 video1.width = 640;
 video1.height = 320;
