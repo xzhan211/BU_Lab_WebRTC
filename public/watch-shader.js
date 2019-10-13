@@ -8,7 +8,9 @@
 
     let vShader = "";
     let hShader = "";
+    let iter = null;
 
+    let fakeFlag = false;
 
     let peerConnection;
     socket.on('offer', function (id, description) {
@@ -59,11 +61,6 @@
         .catch(e => console.error(e));
     });
 
-    /*
-    socket.on('connect', function () {
-      socket.emit('watcher');
-    });
-    */
 
     const startVedio = document.querySelector('#startVedio');
     startVedio.onclick = () => {
@@ -81,21 +78,6 @@
     socket.on('bye', function () {
       peerConnection.close();
     });
-    /*
-    let receivedPeerId = null;
-    let conn = null;
-    let peer = new Peer();
-
-    socket.on('peerId_test', function (data) {
-      receivedPeerId = data;
-      console.log("This peerId is from broadcast part >>  " + receivedPeerId);
-      conn = peer.connect(receivedPeerId);
-      conn.on('open', () => {
-        conn.send('Done');
-      });
-    });
-    */
-
 
     var camera, scene, renderer, controls, mobile;
 
@@ -153,37 +135,8 @@
             value: texture
           }
         },
-
-        //vertexShader: vertex_shader,
         vertexShader: vShader,
-
-        /*
-        vertexShader: '\
-        varying vec3 worldPosition;\n\
-        #include <common>\n\
-        void main () {\n\
-          vec4 p = vec4 (position, 1.0);\n\
-          worldPosition = transformDirection(position, modelMatrix);\n\
-          gl_Position = projectionMatrix * modelViewMatrix * p;\n\
-        }',
-        */
-        //fragmentShader: fragmentShader_equi
         fragmentShader: hShader
-        /*
-        fragmentShader: '\
-        uniform sampler2D map;\n\
-        varying vec3 worldPosition;\n\
-        #include <common>\n\
-        const float pi = 3.141592653589793238462643;\n\
-        const float twoPi = 6.283185307179586476925286;\n\
-        void main () {\n\
-          vec3 direction = normalize(worldPosition);\n\
-          vec2 st = vec2(atan(direction.z, direction.x), acos(-direction.y));\n\
-          st /= vec2(twoPi, pi);\n\
-          st.x += 0.5;\n\
-          gl_FragColor = texture2D(map, st);\n\
-        }'
-        */
       });
 
       mesh = new THREE.Mesh(geometry, material);
@@ -204,15 +157,6 @@
       document.addEventListener('mousemove', onDocumentMouseMove, false);
       document.addEventListener('mouseup', onDocumentMouseUp, false);
       document.addEventListener('wheel', onDocumentMouseWheel, false);
-      /*
-        // May want to use for later if we decide to also have touch android
-        // orientation controls on mobile devices
-        document.addEventListener( 'touchstart', onDocumentMouseDown, false);
-        document.addEventListener( 'touchmove', onDocumentMouseMove, false);
-        document.addEventListener( 'touchend', onDocumentMouseUp, false);
-      */
-
-
     }
 
     document.addEventListener('fullscreenchange', fullscreenHandler);
@@ -280,18 +224,23 @@
 
       if (mobile) {
         controls.update();
-        let dd = new Date();
-        let obj = {
-          'unix_time_with_ms': dd,
-          'quaternion': [controls.getX(), controls.getY(), controls.getZ(), controls.getW()]
-        }
-        if (conn != null) {
-          conn.send(JSON.stringify(obj));
+
+        if(!fakeFlag){
+          let dd = new Date();
+          let obj = {
+            'unix_time_with_ms': dd,
+            'quaternion': [controls.getX(), controls.getY(), controls.getZ(), controls.getW()]
+          }
+          if (conn != null) {
+            conn.send(JSON.stringify(obj));
+          }
+          console.log("real");
         }
         renderer.render(scene, camera);
       } else {
         update();
       }
+
     }
 
     function update() {
@@ -299,20 +248,18 @@
       lat = Math.max(-85, Math.min(85, lat));
       phi = THREE.Math.degToRad(90 - lat);
       theta = THREE.Math.degToRad(lon);
-      let dd = new Date();
-      let obj = {
-        'unix_time_with_ms': dd,
-        'yaw': phi,
-        'pitch': theta
-      }
-      if (conn != null) {
-        conn.send(JSON.stringify(obj));
-        /*
-          conn.send('---- phi, theta ----');
-          conn.send(phi);
-          conn.send(theta);
-          conn.send('--------------------');
-         */
+
+      if(!fakeFlag){
+        let dd = new Date();
+        let obj = {
+          'unix_time_with_ms': dd,
+          'yaw': phi,
+          'pitch': theta
+        }
+        if (conn != null) {
+          conn.send(JSON.stringify(obj));
+        }
+        console.log("real");
       }
 
       camera.position.x = distance * Math.sin(phi) * Math.cos(theta);
@@ -324,3 +271,41 @@
       renderer.render(scene, camera);
 
     }
+
+    function startFakeData(){
+      if(fakeFlag){
+        console.log("Send fake data!");
+        iter = setInterval(function(){
+          let obj = {
+            'first': 11111,
+            'second': 22222,
+            'third': 33333,
+            'fourth': 44444
+          }
+          console.log("fake");
+          if (conn != null) {
+            conn.send(JSON.stringify(obj));
+          }
+        },1000);
+      }
+    }
+
+    let startFakeDataButton = document.getElementById("startFakeDataButton");
+    startFakeDataButton.addEventListener('click', startFakeData);
+
+    function stopFakeData(){
+      clearInterval(iter);
+    }
+
+    let stopFakeDataButton = document.getElementById("stopFakeDataButton");
+    stopFakeDataButton.addEventListener('click', stopFakeData);
+
+
+
+    function checkSwitch(){
+      fakeFlag = document.getElementById("switchId").checked;
+      console.log(">> " + fakeFlag);
+    }
+
+    let switchButton = document.getElementById("switchId");
+    switchButton.addEventListener('click', checkSwitch);

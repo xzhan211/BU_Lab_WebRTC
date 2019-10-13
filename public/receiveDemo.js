@@ -49,8 +49,8 @@ let cntLaptop = 0;
       //console.log("++++++++++++++");
       if(q.size() < queueSize){
         q.addItem(obj);
-        console.log("new item >> " + q.checkFirstItem());
-        console.log("cur size >> " + q.size());
+        //console.log("new item >> " + q.checkFirstItem());
+        //console.log("cur size >> " + q.size());
       }else{
         console.log("Queue is full, discard new data!");
       }
@@ -65,6 +65,12 @@ let cntLaptop = 0;
     }else if(obj.hasOwnProperty("yaw")){
       cntLaptop++;
       indexedDBAdd("laptop", obj);
+    }else if(obj.hasOwnProperty("first")){
+      console.log("first >> " + obj.first);
+      console.log("second >> " + obj.second);
+      console.log("third >> " + obj.third);
+      console.log("fourth >> " + obj.fourth);
+
     }
 
     /*
