@@ -11,6 +11,7 @@
     let iter = null;
 
     let fakeFlag = false;
+    let fakeData = [];
 
     let peerConnection;
     socket.on('offer', function (id, description) {
@@ -275,14 +276,24 @@
     function startFakeData(){
       if(fakeFlag){
         console.log("Send fake data!");
+        let pos = 0;
         iter = setInterval(function(){
-          let obj = {
-            'first': 11111,
-            'second': 22222,
-            'third': 33333,
-            'fourth': 44444
+
+          if(pos >= fakeData.length){
+            stopFakeData();
           }
+
           console.log("fake");
+          let curObj = fakeData[pos];
+          pos = pos + 1;
+
+          let obj = {
+            'time_stamp': curObj.f_time,
+            'pitch_': curObj.f_p,
+            'yaw_': curObj.f_y,
+            'roll_': curObj.f_r
+          }
+
           if (conn != null) {
             conn.send(JSON.stringify(obj));
           }
@@ -309,3 +320,39 @@
 
     let switchButton = document.getElementById("switchId");
     switchButton.addEventListener('click', checkSwitch);
+
+
+    function importFunc(){
+      console.log("click import!");
+      let selectedFile = document.getElementById("files").files[0];//get the object
+      //let name = selectedFile.name;
+      //let size = selectedFile.size;
+      //console.log("name:"+name+" size："+size);
+      let reader = new FileReader();
+      reader.readAsText(selectedFile);
+      reader.onload = function(){
+        let tempData = this.result;
+        let lineData = tempData.split(/\r\n|\n/);
+        lineData.forEach((line)=>{
+          console.log(typeof line);
+
+          let words = line.split(" ");
+          fakeData.push({
+            'f_time': words[0],
+            'f_p': words[2],
+            'f_y': words[3],
+            'f_r': words[4],
+          });
+
+        });
+        /*
+        // test
+        fakeData.forEach((line) => {
+          console.log(line);
+        });
+        */
+      }
+    }
+
+    let importFileButton = document.getElementById("import");
+    importFileButton.addEventListener('click', importFunc);

@@ -35,13 +35,20 @@
     <button id="startVedio">Start Vedio</button>
     <br>
     <br>
+
     <label class="switch">
       <input id="switchId" type="checkbox">
       <span class="slider round"></span>
     </label>
+
     <br>
-    <button id="startFakeDataButton">Send fake data</button>
-    <button id="stopFakeDataButton">Stop fake data</button>
+    <div>
+      <input type="file" id="files" οnchange="import();"/>
+      <input type="button" id="import" value="Import File"/>
+    </div>
+    <br>
+    <button id="startFakeDataButton">Send Fake Data</button>
+    <button id="stopFakeDataButton">Stop Fake Data</button>
   </div>
 
 
@@ -55,6 +62,6 @@
   <script src="/shaderLib.js"></script>
   <script src="/watch-shader.js"></script>
   <script src="/sendDemo.js"></script>
-
+  <script src="/readText.js"></script>
 </body>
 </html>

@@ -65,12 +65,11 @@ let cntLaptop = 0;
     }else if(obj.hasOwnProperty("yaw")){
       cntLaptop++;
       indexedDBAdd("laptop", obj);
-    }else if(obj.hasOwnProperty("first")){
-      console.log("first >> " + obj.first);
-      console.log("second >> " + obj.second);
-      console.log("third >> " + obj.third);
-      console.log("fourth >> " + obj.fourth);
-
+    }else if(obj.hasOwnProperty("time_stamp")){
+      console.log("time_stamp >> " + obj.time_stamp);
+      console.log("pitch_ >> " + obj.pitch_);
+      console.log("yaw_ >> " + obj.yaw_);
+      console.log("roll_ >> " + obj.roll_);
     }
 
     /*
