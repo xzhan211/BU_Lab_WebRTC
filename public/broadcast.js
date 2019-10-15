@@ -47,29 +47,30 @@ socket.on('bye', function(id) {
 // Resolution part
 //const defaultButton = document.querySelector('#default');
 const reloadButton = document.querySelector('#reload');
-const vgaButton = document.querySelector('#vga');
-const qvgaButton = document.querySelector('#qvga');
+const oneKButton = document.querySelector('#oneK');
+const onePfiveKButton = document.querySelector('#onePfiveK');
 const hdButton = document.querySelector('#hd');
-const fullHdButton = document.querySelector('#full-hd');
+//const fullHdButton = document.querySelector('#full-hd');
 const twoKButton = document.querySelector('#twoK');
+const twoPfiveKButton = document.querySelector('#twoPfiveK');
 const fourKButton = document.querySelector('#fourK');
 
 reloadButton.onclick = () => {
     location.reload();
 };
 
-vgaButton.onclick = () => {
-    console.log("click vga");
+oneKButton.onclick = () => {
+    console.log("click 1K");
       videoSource = videoSelect.value;
-    getMedia(vgaConstraints);
-    document.getElementById("resolution").innerHTML = "VGA 640*480";
+    getMedia(oneKConstraints);
+    document.getElementById("resolution").innerHTML = "1K 960*480";
 };
 
-qvgaButton.onclick = () => {
-    console.log("click qvga");
+onePfiveKButton.onclick = () => {
+    console.log("click 1.5K");
       videoSource = videoSelect.value;
-    getMedia(qvgaConstraints);
-    document.getElementById("resolution").innerHTML = "QVGA 320*240";
+    getMedia(onePfiveKConstraints);
+    document.getElementById("resolution").innerHTML = "1.5K 1440*720";
 };
 
 hdButton.onclick = () => {
@@ -79,12 +80,14 @@ hdButton.onclick = () => {
     document.getElementById("resolution").innerHTML = "HD 1280*720";
 };
 
+/*
 fullHdButton.onclick = () => {
     console.log("click fullHd");
       videoSource = videoSelect.value;
     getMedia(fullHdConstraints);
     document.getElementById("resolution").innerHTML = "FHD 1920*1080";
 };
+*/
 
 twoKButton.onclick = () => {
     console.log("click 2K");
@@ -92,6 +95,15 @@ twoKButton.onclick = () => {
     getMedia(twoKConstraints);
     document.getElementById("resolution").innerHTML = "2K 1920*960";
 };
+
+
+twoPfiveKButton.onclick = () => {
+    console.log("click 2.5K");
+      videoSource = videoSelect.value;
+    getMedia(twoPfiveKConstraints);
+    document.getElementById("resolution").innerHTML = "2.5K 2880*1440";
+};
+
 
 fourKButton.onclick = () => {
     console.log("click 4K");
@@ -103,18 +115,18 @@ fourKButton.onclick = () => {
 
 
 
-const qvgaConstraints = {
+const oneKConstraints = {
     video: {
-        width: {exact: 320},
-        height: {exact: 240},
+        width: {exact: 960},
+        height: {exact: 480},
         deviceId: videoSource ? {exact: videoSource} : undefined
     }
 };
 
-const vgaConstraints = {
+const onePfiveKConstraints = {
     video: {
-        width: {exact: 640},
-        height: {exact: 480},
+        width: {exact: 1440},
+        height: {exact: 720},
         deviceId: videoSource ? {exact: videoSource} : undefined
     }
 };
@@ -127,6 +139,7 @@ const hdConstraints = {
     }
 };
 
+/*
 const fullHdConstraints = {
     video: {
         width: {exact: 1920},
@@ -134,11 +147,20 @@ const fullHdConstraints = {
         deviceId: videoSource ? {exact: videoSource} : undefined
     }
 };
+*/
 
 const twoKConstraints = {
     video: {
         width: {exact: 1920},
         height: {exact: 960},
+        deviceId: videoSource ? {exact: videoSource} : undefined
+    }
+};
+
+const twoPfiveKConstraints = {
+    video: {
+        width: {exact: 2880},
+        height: {exact: 1440},
         deviceId: videoSource ? {exact: videoSource} : undefined
     }
 };

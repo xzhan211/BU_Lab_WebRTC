@@ -288,16 +288,17 @@
           pos = pos + 1;
 
           let obj = {
-            'time_stamp': curObj.f_time,
-            'pitch_': curObj.f_p,
-            'yaw_': curObj.f_y,
-            'roll_': curObj.f_r
+            'key': '####',
+            'ts': curObj.f_time,
+            'p': curObj.f_p,
+            'y': curObj.f_y,
+            'r': curObj.f_r
           }
 
           if (conn != null) {
             conn.send(JSON.stringify(obj));
           }
-        },1000);
+        },33);
       }
     }
 
