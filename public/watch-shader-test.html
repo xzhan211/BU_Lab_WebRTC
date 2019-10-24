@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Viewer</title>
+  <meta name="description" content="WebRTC Video Broadcast.">
+  <meta charset='utf-8'>
+  <link href="/main.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link href="//vjs.zencdn.net/7.3.0/video-js.min.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+    integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous">
+  </script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+    integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous">
+  </script>
+  <script src="//vjs.zencdn.net/7.3.0/video.min.js"></script>
+</head>
+
+<body style="background-color:black;">
+  <div id="container" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 640px;">
+    <video id="live_video1" class="video-js vjs-default-skin" crossorigin="anonymous"></video>
+    <select id="vShader">
+      <option value="1">vertex_shader</option>
+    </select>
+    <select id="hShader">
+      <option value="1">equi</option>
+      <option value="2">baseball_equi_v2</option>
+      <option value="3">baseball_equi</option>
+    </select>
+    <button id="startVedio">Start Vedio</button>
+    <br>
+    <br>
+
+    <label class="switch">
+      <input id="switchId" type="checkbox">
+      <span class="slider round"></span>
+    </label>
+
+    <br>
+    <div>
+      <input type="file" id="files" οnchange="import();"/>
+      <input type="button" id="import" value="Import File"/>
+    </div>
+    <br>
+    <button id="startFakeDataButton">Send Fake Data</button>
+    <button id="stopFakeDataButton">Stop Fake Data</button>
+  </div>
+
+
+  <script src="/node_modules/videojs-vr/dist/videojs-vr.min.js"></script>
+  <script src="https://unpkg.com/peerjs@1.0.0/dist/peerjs.min.js"></script>
+  <script src="/three.js"></script>
+  <script src="/DeviceOrientationControls.js"></script>
+  <script src="/CSS3DRenderer.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/view.js"></script>
+  <script src="/shaderLib.js"></script>
+  <script src="/watch-shader-test.js"></script>
+  <script src="/sendDemo.js"></script>
+</body>
+</html>
