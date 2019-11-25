@@ -310,7 +310,7 @@
           if (conn != null) {
             conn.send(JSON.stringify(obj));
           }
-        },33);
+        }, 1000);
       }
     }
 

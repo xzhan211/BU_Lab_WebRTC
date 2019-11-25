@@ -1,5 +1,4 @@
 'use strict';
-
 /*global socket, video, config*/
 const peerConnections = {};
 
