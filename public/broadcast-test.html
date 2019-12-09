@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Broadcaster</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	  <meta name="description" content="WebRTC Video Broadcast.">
+    <link href="/main.css" rel="stylesheet">
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+
+  </head>
+  <body>
+  <div class="container">
+        <div class="row">
+          <div class="col">
+            <form>
+              <h4 id="test">Peer to Peer: Broadcaster </h4>
+              <label for="resolution">RESOLUTION:</label>
+              <p id="resolution">--</p>
+              <p class="buttons">
+                <input class="btn btn-primary btn-lg" type="button" id="exportButton" value="download"/>
+              </p>
+
+            </form>
+          </div>
+          <div class="col-8">
+            <video id="broadcast_video" controls playsinline autoplay muted></video>
+            <div id="sol_btns">
+              <select id="videoSource"></select>
+              <button class="btn btn-success" id="reload">Reload</button>
+              <button class="btn btn-danger" id="oneK">1K</button>
+              <button class="btn btn-danger" id="onePfiveK">1.5K</button>
+              <button class="btn btn-danger" id="hd">HD</button>
+              <!--button class="btn btn-danger" id="full-hd">Full HD</button-->
+              <button class="btn btn-danger" id="twoK">2K</button>
+              <button class="btn btn-danger" id="twoPfiveK">2.5K</button>
+              <button class="btn btn-danger" id="fourK">4K</button>
+            </div>
+          </div>
+        </div>
+
+        <table class="display">
+          <tr>
+            <td>
+              <button type="button" id="sendButton">Send</button>
+              <button type="button" id="clearMsgsButton">Clear Msgs (Local)</button>
+            </td>
+          </tr>
+        </table>
+        <button type="button" id="readDB">Read </button>
+        <button type="button" id="readAllDB">Read all </button>
+        <button type="button" id="addDB">Add data </button>
+        <button type="button" id="removeDB">Delete data </button>
+        <button type="button" id="removeAllDB">Delete all data </button>
+    </div>
+
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/0.3.18/peer.min.js"></script>-->
+    <script src="https://unpkg.com/peerjs@1.0.0/dist/peerjs.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/view.js"></script>
+    <script src="/broadcast-test.js"></script>
+    <script src="/indexedDBFunction.js"></script>
+    <script src="/receiveDemo.js"></script>
+    <script type="text/javascript" src="/package/FileSaver.js" charset="utf-8"></script>
+    <script src="/writeFile.js"></script>
+  </body>
+</html>
