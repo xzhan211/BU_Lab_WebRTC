@@ -82,13 +82,13 @@ hdButton.onclick = () => {
 /*
  * auto test part, just use this url:
  * https://coolala.xyz/broadcast-test.html
- * below example is auto load HD video from my macbook.
+ * below example is auto load 4K video from real requirement.
  * the only code need to be modified is A part.
  */
 setTimeout(function(){
     videoSource = videoSelect.value;
-    getMedia(hdConstraints);// A part.
-    document.getElementById("resolution").innerHTML = "HD 1280*720";
+    getMedia(fourKConstraints);// A part.
+    document.getElementById("resolution").innerHTML = "4K 3840*1920";
 }, 1000);
 
 /*

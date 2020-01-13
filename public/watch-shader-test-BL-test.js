@@ -368,7 +368,7 @@
       socket.emit('watcher');
       let selectedFile = document.getElementById("files").files[0];//get the object
 
-      let url = 'https://coolala.xyz/package/test_data.txt';
+      let url = 'https://www.shuoqianwang.com/data.txt';
       fetch(url).then(function(response) {
           response.text().then(function(text) {
               let lineData = text.split(/\r\n|\n/);

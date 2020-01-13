@@ -7,6 +7,7 @@
 > ### Source code structure
 > ### Main functions in this Apps
 > ### How to use this Apps
+> ### How to use "Auto Test" function
 
 ## What is WebRTC?
 WebRTC is an open source project to enable realtime communication (Peer to Peer UDP) of audio, video and data in Web and native apps. Users can access these Web applications directly with the mainstream browsers such as Chrome, Firefox.
@@ -272,10 +273,25 @@ Got the data, done!
 4. It is the first version of this document, not the final one. I will keep improving it. (I am sure some typo in it...)
 
 
+## How to use "Auto Test" function
 
+There are only two buttons related to "Auto Test".
 
+![](pictures/auto1.png)
 
+####Step 1: 
 
+Click "Broadcaster-Auto Test" button, broadcaster page will be opened with 4K 3840*1920 streaming video automatically.
 
+####Step 2:
+Click "Viewer-shader-BL-Auto Test" button, viewer page will be opened.
 
+Viewer side has three functions:
 
+A. Viewer side can send test data back to broadcaster side after the "start signal".
+
+B. Viewer side can detect the "start signal": when "black screen" disappears, viewer side start to send test data back.
+
+C. Test data can be configured through [**github page**](https://www.shuoqianwang.com/data.txt). The file path can be set in ***watch-shader-test-BL-test.js***.
+
+![](pictures/auto2.png)
