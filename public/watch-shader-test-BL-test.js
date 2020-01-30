@@ -331,10 +331,7 @@
           }
 
           if (conn != null) {
-
-              let ttt = JSON.stringify(obj);
-              console.log(">> "+ttt);
-              conn.send(JSON.stringify(ttt));
+              conn.send(JSON.stringify(obj));
           }
         }, 1000);
       }
