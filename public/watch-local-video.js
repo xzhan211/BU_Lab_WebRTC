@@ -4,7 +4,7 @@
     video1.height = 640;
     video1.loop = true;
     video1.muted = false;
-    //video1.controls = true;
+    video1.controls = true;
     //video1.setAttribute('playsinline', '');
 
 
