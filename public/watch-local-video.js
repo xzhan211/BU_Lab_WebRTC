@@ -1,10 +1,11 @@
     var video1 = document.getElementById('live_video1');
+
     video1.width = 640;
     video1.height = 640;
     video1.loop = true;
     video1.muted = false;
-    video1.controls = true;
-    video1.setAttribute('playsinline', '');
+    //video1.controls = true;
+    //video1.setAttribute('playsinline', '');
 
 
     let vShader = "";
@@ -161,20 +162,8 @@
 
       if (mobile) {
         controls.update();
-
-        if(!fakeFlag){
-          let dd = new Date();
-          let obj = {
-            'unix_time_with_ms': dd,
-            'quaternion': [controls.getX(), controls.getY(), controls.getZ(), controls.getW()]
-          }
-          if (conn != null) {
-            conn.send(JSON.stringify(obj));
-          }
-          //console.log("real");
-        }
         renderer.render(scene, camera);
-      } else {
+      }else{
         update();
       }
 
@@ -202,7 +191,8 @@
     let playSelectedFile = function playSelectedFileInit(event) {
         var file = this.files[0];
         var type = file.type;
-        var canPlay = video1.canPlayType(type);
+        var videoNode = video1;
+        var canPlay = videoNode.canPlayType(type);
         canPlay = (canPlay === '' ? 'no' : canPlay);
         var message = 'Can play type "' + type + '": ' + canPlay;
         var isError = canPlay === 'no';
@@ -210,7 +200,7 @@
             return;
         }
         var fileURL = URL.createObjectURL(file);
-        video1.src = fileURL;
+        videoNode.src = fileURL;
 
         let vSelect = document.getElementById('vShader');
         let vIndex = vSelect.selectedIndex;
@@ -235,6 +225,7 @@
 
         init();
         animate();
+
     }
 
     var URL = window.URL || window.webkitURL;
