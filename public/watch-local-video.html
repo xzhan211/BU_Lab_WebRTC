@@ -19,6 +19,18 @@
     integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous">
   </script>
   <script src="//vjs.zencdn.net/7.3.0/video.min.js"></script>
+
+
+  <script src="/node_modules/videojs-vr/dist/videojs-vr.min.js"></script>
+  <script src="https://unpkg.com/peerjs@1.0.0/dist/peerjs.min.js"></script>
+  <script src="/three.js"></script>
+  <script src="/DeviceOrientationControls.js"></script>
+  <script src="/CSS3DRenderer.js"></script>
+  <!--script src="/socket.io/socket.io.js"></script-->
+  <!--script src="/view.js"></script-->
+  <script src="/shaderLib.js"></script>
+  <!--script src="/sendDemo.js"></script-->
+
 </head>
 
 <body style="background-color:black;">
@@ -37,20 +49,9 @@
     <br>
     <div>
         <input type="file" accept="video/*">
-        <button id="startVideo">Start Video</button>
+        <button id="startVideo"></button>
     </div>
   </div>
-
-
-  <script src="/node_modules/videojs-vr/dist/videojs-vr.min.js"></script>
-  <script src="https://unpkg.com/peerjs@1.0.0/dist/peerjs.min.js"></script>
-  <script src="/three.js"></script>
-  <script src="/DeviceOrientationControls.js"></script>
-  <script src="/CSS3DRenderer.js"></script>
-  <script src="/socket.io/socket.io.js"></script>
-  <script src="/view.js"></script>
-  <script src="/shaderLib.js"></script>
-  <script src="/watch-local-video.js"></script>
-  <script src="/sendDemo.js"></script>
 </body>
+  <script src="/watch-local-video.js"></script>
 </html>

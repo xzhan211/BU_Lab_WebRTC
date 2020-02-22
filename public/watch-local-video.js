@@ -189,18 +189,6 @@
 
 
     let playSelectedFile = function playSelectedFileInit(event) {
-        var file = this.files[0];
-        var type = file.type;
-        var videoNode = video1;
-        var canPlay = videoNode.canPlayType(type);
-        canPlay = (canPlay === '' ? 'no' : canPlay);
-        var message = 'Can play type "' + type + '": ' + canPlay;
-        var isError = canPlay === 'no';
-        if(isError){
-            return;
-        }
-        var fileURL = URL.createObjectURL(file);
-        videoNode.src = fileURL;
 
         let vSelect = document.getElementById('vShader');
         let vIndex = vSelect.selectedIndex;
@@ -214,18 +202,31 @@
         console.log("H Shader :"+hVal);
 
         if(vVal == 1)
-          vShader = vertex_shader;
+            vShader = vertex_shader;
 
         if(hVal == 1)
-          hShader = fragmentShader_equi;
+            hShader = fragmentShader_equi;
         else if(hVal == 2)
-          hShader = fragmentShader_baseball_equi_v2;
+            hShader = fragmentShader_baseball_equi_v2;
         else if(hVal == 3)
-          hShader = fragmentShader_baseball_equi;
+            hShader = fragmentShader_baseball_equi;
+
+
+        var file = this.files[0];
+        var type = file.type;
+        var videoNode = video1;
+        var canPlay = videoNode.canPlayType(type);
+        canPlay = (canPlay === '' ? 'no' : canPlay);
+        var message = 'Can play type "' + type + '": ' + canPlay;
+        var isError = canPlay === 'no';
+        if(isError){
+            return;
+        }
+        var fileURL = URL.createObjectURL(file);
+        videoNode.src = fileURL;
 
         init();
         animate();
-
     }
 
     var URL = window.URL || window.webkitURL;
