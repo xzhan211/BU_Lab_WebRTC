@@ -314,26 +314,33 @@
         let pos = 0;
         iter = setInterval(function(){
 
-          if(pos >= fakeData.length){
+          if(pos >= fakeData.length + 1){
             stopFakeData();
           }
 
-          console.log("fake");
-          let curObj = fakeData[pos];
+          if(pos < fakeData.length){
+            console.log("fake");
+            let curObj = fakeData[pos];
+            //pos = pos + 1;
+
+            let obj = {
+                'key': '####',
+                'ts': curObj.f_time,
+                'p': curObj.f_p,
+                'y': curObj.f_y,
+                'r': curObj.f_r
+            }
+
+            if (conn != null) {
+                conn.send(JSON.stringify(obj));
+            }
+          }else{
+            // when fake data ended, close current viewer peer.
+            console.log("fake finish");
+            peerConnection.close();
+          }
           pos = pos + 1;
-
-          let obj = {
-            'key': '####',
-            'ts': curObj.f_time,
-            'p': curObj.f_p,
-            'y': curObj.f_y,
-            'r': curObj.f_r
-          }
-
-          if (conn != null) {
-              conn.send(JSON.stringify(obj));
-          }
-        }, 1000);
+        }, 500);
       }
     }
 
@@ -374,8 +381,8 @@
                   let words = line.split(" ");
                   fakeData.push({
                     'f_time': words[0],
-                    'f_p': words[2],
-                    'f_y': words[3],
+                    'f_p': words[3],
+                    'f_y': words[2],
                     'f_r': words[4],
                   });
               });
