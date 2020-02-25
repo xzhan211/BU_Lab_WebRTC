@@ -337,7 +337,7 @@
           }else{
             // when fake data ended, close current viewer peer.
             console.log("fake finish");
-            peerConnection.close();
+            window.close();
           }
           pos = pos + 1;
         }, 500);
