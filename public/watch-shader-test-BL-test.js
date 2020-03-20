@@ -326,8 +326,9 @@
             let obj = {
                 'key': '####',
                 'ts': curObj.f_time,
-                'p': curObj.f_p,
+                //'p': curObj.f_p,
                 'y': curObj.f_y,
+                'p': curObj.f_p,
                 'r': curObj.f_r
             }
 
