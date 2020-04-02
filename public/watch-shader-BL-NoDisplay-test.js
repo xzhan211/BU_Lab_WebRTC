@@ -1,10 +1,15 @@
     var video1 = document.getElementById('live_video1');
-    video1.width = 640;
-    video1.height = 640;
+    video1.width = 32;
+    video1.height = 32;
+    video1.setAttribute('autoplay', 'false');
     video1.loop = true;
     video1.muted = true;
     video1.controls = true;
     video1.setAttribute('playsinline', '');
+    video1.setAttribute('autoplay', 'false');
+    video1.setAttribute('preload', 'none');
+    video1.autoplay = 'false';
+    //video1.preload = 'none';
 
 
     let canvas = document.getElementById("canvas");
@@ -373,8 +378,7 @@
       socket.emit('watcher');
       let selectedFile = document.getElementById("files").files[0];//get the object
 
-      //let url = 'https://www.shuoqianwang.com/data.txt';
-      let url = 'https://yichen-git.github.io/data.txt';
+      let url = 'https://www.shuoqianwang.com/data.txt';
       fetch(url).then(function(response) {
           response.text().then(function(text) {
               let lineData = text.split(/\r\n|\n/);
@@ -392,4 +396,4 @@
       });
     }
     // dealy 10s, give broadcast side enough time to set up environment
-    setTimeout(autoReadTestData, 10000);
+    setTimeout(autoReadTestData, 5000);

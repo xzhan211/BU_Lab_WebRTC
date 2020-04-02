@@ -23,7 +23,8 @@
 
 <body style="background-color:black;">
   <div id="container" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 640px;">
-    <video id="live_video1" class="video-js vjs-default-skin" crossorigin="anonymous"></video>
+    <video id="live_video1" class="video-js vjs-default-skin"
+        crossorigin="anonymous" autoplay="false"></video>
     <canvas id="canvas" width="16" height="8"></canvas>
     <br>
     <select id="vShader">
@@ -62,7 +63,7 @@
   <script src="/socket.io/socket.io.js"></script>
   <script src="/view.js"></script>
   <script src="/shaderLib.js"></script>
-  <script src="/watch-shader-test-BL-test.js"></script>
+  <script src="/watch-shader-BL-NoDisplay-test.js"></script>
   <!--script src="/package/test_data.txt"></script-->
   <script src="/sendDemo.js"></script>
 </body>
