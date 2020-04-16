@@ -52,6 +52,7 @@ const hdButton = document.querySelector('#hd');
 //const fullHdButton = document.querySelector('#full-hd');
 const twoKButton = document.querySelector('#twoK');
 const twoPfiveKButton = document.querySelector('#twoPfiveK');
+const threeKButton = document.querySelector('#threeK');
 const fourKButton = document.querySelector('#fourK');
 
 reloadButton.onclick = () => {
@@ -100,7 +101,14 @@ twoPfiveKButton.onclick = () => {
     console.log("click 2.5K");
       videoSource = videoSelect.value;
     getMedia(twoPfiveKConstraints);
-    document.getElementById("resolution").innerHTML = "2.5K 2880*1440";
+    document.getElementById("resolution").innerHTML = "2.5K 2560*1280";
+};
+
+threeKButton.onclick = () => {
+    console.log("click 3K");
+      videoSource = videoSelect.value;
+    getMedia(threeKConstraints);
+    document.getElementById("resolution").innerHTML = "3K 2880*1440";
 };
 
 
@@ -157,6 +165,14 @@ const twoKConstraints = {
 };
 
 const twoPfiveKConstraints = {
+    video: {
+        width: {exact: 2560},
+        height: {exact: 1280},
+        deviceId: videoSource ? {exact: videoSource} : undefined
+    }
+};
+
+const threeKConstraints = {
     video: {
         width: {exact: 2880},
         height: {exact: 1440},
