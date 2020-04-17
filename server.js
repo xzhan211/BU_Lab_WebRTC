@@ -9,7 +9,7 @@ let broadcastId;
 if (credentials.key && credentials.cert) {
   const https = require('https');
   server = https.createServer(credentials, app);
-  port = 443; // we use this, since in Chrome, it is required to use 'https' when calling local camera
+  port = 8086; // we use this, since in Chrome, it is required to use 'https' when calling local camera
 } else {
   const http = require('http');
   server = http.createServer(app);
