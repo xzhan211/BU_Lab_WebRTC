@@ -329,7 +329,7 @@
             //pos = pos + 1;
 
             let obj = {
-                'key': '####',
+                'key': 'AWCC',
                 'ts': curObj.f_time,
                 //'p': curObj.f_p,
                 'y': curObj.f_y,
